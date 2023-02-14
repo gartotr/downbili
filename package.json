@@ -2,7 +2,7 @@
   "name": "downbili",
   "version": "0.1.0",
   "description": "fock ibili 下载视频转音频用",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc"

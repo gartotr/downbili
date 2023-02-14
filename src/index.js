@@ -8,13 +8,9 @@ const path = require('path');
 const httpio = require('./httpio');
 const fs = require('fs');
 const _ = require('reero');
-// const request = require("request")
-// const httpio = require("./httpio")
-// const http = require("http")
-// const https = require("https")
 
 const ad = require('./addr');
-const progressBar = require('./ progress-bar');
+const progressBar = require('./progress-bar');
 
 // 判断是不是 Object
 function isObject(o) {
