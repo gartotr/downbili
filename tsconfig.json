@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "removeComments": false,
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "outDir": "lib",
+    "strict": true,
+    "lib": ["es6"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "typeRoots": ["node_modules/@types"],
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules"]
+}

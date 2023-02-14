@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json.schemastore.org/prettierrc",
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "es5",
+  "printWidth": 150,
+  "arrowParens": "avoid",
+  "vueIndentScriptAndStyle": true
+}
