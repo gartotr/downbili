@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gartotr/downbili#readme",
   "dependencies": {
+    "reero": "^1.0.4",
     "single-line-log": "^1.1.2",
     "websect": "^1.1.2"
   },
