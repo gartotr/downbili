@@ -107,8 +107,44 @@ export interface VideoMessage {
   }[];
 }
 
+/**
+ * 视频下载配置
+ */
 export interface Option {
-  url: string | any;
+  /**
+   * 视频URL
+   */
+  url: string;
+  /**
+   * 112是1080P+，80是1080P，64是720P+，32是480P，16是360P
+   */
   level?: number;
-  sessdata?: any;
+  /**
+   * sessdata sessdata后的一大串
+   */
+  sessdata?: string;
+  /**
+   * 默认名称
+   */
+  default_name?: string;
+  /**
+   * 名称
+   */
+  name?: string;
+  /**
+   * type
+   */
+  type?: 'silent' | 'audio' | 'default';
+  /**
+   * file名称
+   */
+  filename?: string;
+  /**
+   * folder
+   */
+  folder?: string;
+  /**
+   * 执行成功的回调
+   */
+  oncomplete?: () => void;
 }

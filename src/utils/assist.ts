@@ -1,11 +1,11 @@
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
-import type { IDownloadOption, ProgressOptions } from '../types';
+import type { Option, ProgressOptions } from '../types/types';
 
 const fs = require('fs');
 const path = require('path');
 
-export function progressWithCookie(res: any, opt: IDownloadOption & { progress?: ProgressOptions }): Promise<any> {
+export function progressWithCookie(res: any, opt: Option & { progress?: ProgressOptions }): Promise<any> {
   return new Promise((resolve, _reject) => {
     const labelname = opt.progress?.labelname ?? 'Download progress';
     const progressLength = opt.progress?.length ?? 50;
@@ -48,7 +48,7 @@ export function progressWithCookie(res: any, opt: IDownloadOption & { progress?:
   });
 }
 
-export function progressWithoutCookie(res: any, opt: IDownloadOption): Promise<any> {
+export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
   return new Promise((resolve, _reject) => {
     const pb = new ProgressBar('Download progress', 50);
     const headers = res.headers;

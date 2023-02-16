@@ -1,18 +1,18 @@
 import * as deal from './deal';
-import type { DeallinkOptions } from '../types';
+import type { Option } from '../types/types';
+import { DownloadObject } from '../types/responseType';
+
 const $ = require('websect');
 const path = require('path');
 
-
 type OrString = string | string[];
 
-export async function deallink(opt: DeallinkOptions, options: Record<string, string>, addr: OrString, videourl: OrString): Promise<void> {
+export async function deallink(opt: Option, options: Record<string, string>, addr: OrString, videourl: OrString): Promise<void> {
   const res = await $.get({
     url: addr,
     headers: options,
   });
-
-  const data = JSON.parse(res.text);
+  const data: DownloadObject = JSON.parse(res.text);
 
   if (data.code === -404 && data.message !== 'success') {
     if (opt.type && opt.type !== 'default') {
@@ -30,7 +30,7 @@ export async function deallink(opt: DeallinkOptions, options: Record<string, str
     const filteredVideos = videos.filter((el: any) => el.id === level);
     durl = filteredVideos.map((el: any) => ({ url: el.baseUrl }));
 
-    if (durl.length > 1 && !opt.download_backup) {
+    if (durl.length > 1) {
       durl = [durl[0]];
     }
   } else if (opt.type === 'audio') {
@@ -38,7 +38,7 @@ export async function deallink(opt: DeallinkOptions, options: Record<string, str
     const audios = dash.audio;
     durl = audios.map((el: any) => ({ url: el.baseUrl }));
 
-    if (durl.length > 1 && !opt.download_backup) {
+    if (durl.length > 1) {
       durl = [durl[0]];
     }
   } else if (!opt.type || opt.type === 'default') {

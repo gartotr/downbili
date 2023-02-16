@@ -1,5 +1,5 @@
 import { get, RequestOptions, IncomingMessage } from 'http';
-import type { OptionsType } from '../types';
+import type { OptionsType } from '../types/types';
 const parse = require('url').parse
 const _get = require('https').get
 
