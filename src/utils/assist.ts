@@ -78,9 +78,10 @@ export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
     });
     const defaultCb = () => console.log('\nDownload complete!\n');
     const cb = opt.oncomplete || defaultCb;
+    const d = { opt: 'opt' };
     res.on('end', () => {
       cb();
-      resolve(res);
+      resolve(d);
     });
     res.on('error', (err: any) => {
       throw err;

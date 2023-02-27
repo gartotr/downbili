@@ -122,7 +122,7 @@ const downBili = {
         opt.level = opt.level ?? 112; // 有会员获取的视频自动设置为1080p+
       }
       const addr = await this.getVideoDownLinkByurl(videourl, level);
-      resolve(deallink(opt, options, addr, videourl));
+      resolve(await deallink(opt, options, addr, videourl));
     });
   },
 };
