@@ -8,13 +8,6 @@ import { deallink } from './utils/addr';
 import type { Option } from './types/types';
 import type { IWebInfo } from './types/responseType';
 
-const defauotOptions: Option = {
-  type: 'default',
-  url: '',
-  level: 16,
-  sessdata: '',
-};
-
 const downBili = {
   /**
    * 再次对视频的信息进行一次封装
@@ -101,16 +94,16 @@ const downBili = {
    * 专门用于下载哔哩哔哩的视频
    * @param {Option} opt
    */
-  downloadVideo: async function (opt: Option = defauotOptions) {
+  downloadVideo: async function (opt: Option) {
     return new Promise(async resolve => {
-      if (!opt.url) {
+      const { url } = opt;
+      if (url) {
         // 如果不存在就直接报错
         throw new Error('opt.url is not defined!');
       }
 
-      const videourl = opt.url;
       const options = {
-        Referer: videourl,
+        Referer: url,
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Safari/605.1.15',
         Cookie: '',
       };
@@ -121,8 +114,8 @@ const downBili = {
         level = 112;
         opt.level = opt.level ?? 112; // 有会员获取的视频自动设置为1080p+
       }
-      const addr = await this.getVideoDownLinkByurl(videourl, level);
-      resolve(await deallink(opt, options, addr, videourl));
+      const addr = await this.getVideoDownLinkByurl(url, level);
+      resolve(await deallink(opt, options, addr, url));
     });
   },
 };
