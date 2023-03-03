@@ -1,6 +1,7 @@
 import { parse } from 'url';
 import websect, { get as websectGet } from 'websect';
 
+import { isavurl, isepurl } from '.';
 import { WEB_INTERFACE_API, PAGE_LIST_API } from '../constant';
 import type { PlayerResponse, PlayerTextObject, WebResponse, WebTextObject, WebData } from '../types/responseType';
 
@@ -121,4 +122,26 @@ export async function getVideoMessageByav(av: string): Promise<WebTextObject> {
   const res: WebResponse = await websectGet(api);
   const parseText: WebTextObject = JSON.parse(res.text);
   return parseText;
+}
+
+/**
+ * 根据视频播放地址获取 视频的av号
+ * @param {string} url 视频的播放地址
+ * @returns {Promise<string>}
+ */
+export async function getavByurl(url: string): Promise<string> {
+  if (isavurl(url)) {
+    return getavByavurl(url);
+  }
+  // 判断是不是番剧的播放地址
+  if (isepurl(url)) {
+    const data = await getavByepurl(url);
+    return data;
+  }
+  // 判断是不是视频地址
+  if (isbvidurl(url)) {
+    const aid = await get_aid_by_bvidurl(url);
+    return String(aid);
+  }
+  return '';
 }

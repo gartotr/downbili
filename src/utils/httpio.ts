@@ -1,11 +1,12 @@
 import { get, RequestOptions, IncomingMessage } from 'http';
 import type { OptionsType } from '../types/types';
+
 const parse = require('url').parse
 const _get = require('https').get
 
 // 解决重定向的问题
 export const _redirect = (res: IncomingMessage, opt: OptionsType) => {
-  var reurl = res.headers.location;
+  let reurl = res.headers.location;
   if (reurl) {
     opt.url = reurl;
     return new Promise((resolve, _reject) => {

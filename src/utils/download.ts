@@ -1,4 +1,4 @@
-import { getavByurl } from '.';
+import { getavByurl } from './getVarious';
 import { parse as _parse } from 'path';
 import { httpGet as _get } from './httpio';
 import { ArticulationEnum, PLAYURL_API } from '../constant';

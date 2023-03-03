@@ -1,5 +1,3 @@
-import { getavByavurl, getavByepurl, isbvidurl, get_aid_by_bvidurl } from './getVarious';
-
 const path = require('path');
 const fs = require('fs');
 /**
@@ -74,26 +72,4 @@ export function isavurl(url: string): boolean {
  */
 export function ismdurl(url: string): boolean {
   return /md\d+/g.test(url);
-}
-
-/**
- * 根据视频播放地址获取 视频的av号
- * @param {string} url 视频的播放地址
- * @returns {Promise<string>}
- */
-export async function getavByurl(url: string): Promise<string> {
-  if (isavurl(url)) {
-    return getavByavurl(url);
-  }
-  // 判断是不是番剧的播放地址
-  if (isepurl(url)) {
-    const data = await getavByepurl(url);
-    return data;
-  }
-  // 判断是不是视频地址
-  if (isbvidurl(url)) {
-    const aid = await get_aid_by_bvidurl(url);
-    return String(aid);
-  }
-  return '';
 }
