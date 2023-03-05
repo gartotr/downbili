@@ -73,3 +73,9 @@ export function isavurl(url: string): boolean {
 export function ismdurl(url: string): boolean {
   return /md\d+/g.test(url);
 }
+
+export function printType(type: string, name?: string, folder?: string) {
+  const dirName = folder ?? 'media';
+  const dir = path.join(process.cwd(), dirName);
+  console.log(`正在下载类型：${type} 名称：${name ?? ''}，位于${dir}`);
+}

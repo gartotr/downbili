@@ -1,33 +1,35 @@
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
 import type { Option, ProgressOptions } from '../types/types';
+import { VideoTypeEnum } from '../constant';
+import { printType } from '.';
 
 const fs = require('fs');
 const path = require('path');
 
 export function progressWithCookie(res: any, opt: Option & { progress?: ProgressOptions }): Promise<any> {
   return new Promise((resolve, _reject) => {
-    const labelname = opt.progress?.labelname ?? 'Download progress';
-    const progressLength = opt.progress?.length ?? 50;
+    const defaultCb = () => console.log('\n 下载成功！ \n');
+
+    const { progress, folder = 'media', name, oncomplete = defaultCb } = opt;
+    const labelname = progress?.labelname ?? '正在下载：';
+    const progressLength = progress?.length ?? 50;
 
     const pb = new ProgressBar(labelname, progressLength);
     const headers = res.headers;
     const total = headers['content-length'];
-    const folder = opt.folder ?? 'media';
     const dir = path.join(process.cwd(), folder);
     createfolder(folder);
-    const fpath = path.join(dir, opt.name);
+    const fpath = path.join(dir, name);
 
-    const printType = (type: string) => console.log(`The ${type} named \033[33m${opt.name}\033[39m is stored in \033[33m${dir}\033[39m`);
-
-    if (!opt.type || opt.name === 'default') {
-      printType('video');
+    if (!opt.type || name === VideoTypeEnum.default) {
+      printType('视频', name, folder);
     }
-    if (opt.type === 'silent') {
-      printType('silent video');
+    if (opt.type === VideoTypeEnum.silent) {
+      printType('无声视频', name, folder);
     }
-    if (opt.type === 'audio') {
-      printType('audio');
+    if (opt.type === VideoTypeEnum.audio) {
+      printType('音频', name, folder);
     }
 
     res.pipe(fs.createWriteStream(fpath));
@@ -36,10 +38,8 @@ export function progressWithCookie(res: any, opt: Option & { progress?: Progress
       completed += chunk.length;
       pb.render({ completed, total });
     });
-    const defaultCb = () => console.log('\nDownload complete!\n');
-    const cb = opt.oncomplete || defaultCb;
     res.on('end', () => {
-      cb();
+      oncomplete();
       resolve(res);
     });
     res.on('error', (err: any) => {
@@ -54,20 +54,17 @@ export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
     const headers = res.headers;
     const total = headers['content-length'];
     const folder = opt.folder ?? 'media';
-    const dir = path.join(process.cwd(), folder);
     createfolder(folder);
     const fpath = path.join(process.cwd(), folder, opt.name);
 
-    const printType = (type: string) => console.log(`The ${type} named \033[33m${opt.name}\033[39m is stored in \033[33m${dir}\033[39m`);
-
     if (!opt.type || opt.name === 'default') {
-      printType('video');
+      printType('视频', opt.name, opt.folder);
     }
-    if (opt.type === 'silent') {
-      printType('silent video');
+    if (opt.type === VideoTypeEnum.silent) {
+      printType('无声视频, opt.name, opt.folder');
     }
-    if (opt.type === 'audio') {
-      printType('audio');
+    if (opt.type === VideoTypeEnum.audio) {
+      printType('音频', opt.name, opt.folder);
     }
 
     res.pipe(fs.createWriteStream(fpath));

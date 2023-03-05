@@ -48,3 +48,21 @@ export enum ArticulationEnum {
    */
   _16 = 360,
 }
+
+/**
+ * 视频类型
+ */
+export enum VideoTypeEnum {
+  /**
+   * 无声视频
+   */
+  silent = 'silent',
+  /**
+   * 音频
+   */
+  audio = 'audio',
+  /**
+   * 默认
+   */
+  default = 'default',
+}

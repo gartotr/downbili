@@ -1,4 +1,5 @@
 import { OutgoingHttpHeader } from 'http';
+import { VideoTypeEnum } from '../constant';
 
 export interface OptionsType {
   url: string;
@@ -35,7 +36,7 @@ export type ICommentsFormatOmit = Omit<ICommentsFormat, 'replies'>;
 
 export interface IDownloadOption {
   name: string;
-  type?: 'default' | 'silent' | 'audio';
+  type?: keyof typeof VideoTypeEnum;
   folder?: string;
   oncomplete?: () => void;
 }
@@ -134,7 +135,7 @@ export interface Option {
   /**
    * type
    */
-  type?: 'silent' | 'audio' | 'default';
+  type?: keyof typeof VideoTypeEnum;
   /**
    * file名称
    */

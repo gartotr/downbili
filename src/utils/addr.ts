@@ -1,6 +1,7 @@
 import * as deal from './deal';
 import type { Option } from '../types/types';
 import { DownloadObject } from '../types/responseType';
+import { VideoTypeEnum } from '../constant';
 
 const $ = require('websect');
 const path = require('path');
@@ -27,7 +28,7 @@ export async function deallink(opt: Option, options: Record<string, string>, add
     }
 
     let durl: any = [];
-    if (!opt.type || opt.type === 'default') {
+    if (!opt.type || opt.type === VideoTypeEnum.default) {
       durl = data.data.durl;
     }
 
@@ -37,12 +38,12 @@ export async function deallink(opt: Option, options: Record<string, string>, add
         const filename = opt.filename;
         let ext: any = path.parse(opt.default_name).ext;
 
-        if (ext === '.m4s' && opt.type === 'silent') {
+        if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
           ext = '.mp4';
           opt.default_name = path.parse(opt.default_name).name + ext;
         }
 
-        if (ext === '.m4s' && opt.type === 'audio') {
+        if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
           ext = '.mp3';
           opt.default_name = path.parse(opt.default_name).name + ext;
         }
@@ -57,12 +58,12 @@ export async function deallink(opt: Option, options: Record<string, string>, add
       const filename = opt.filename;
       let ext = path.parse(opt.default_name).ext;
 
-      if (ext === '.m4s' && opt.type === 'silent') {
+      if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
         ext = '.mp4';
         opt.default_name = path.parse(opt.default_name).name + ext;
       }
 
-      if (ext === '.m4s' && opt.type === 'audio') {
+      if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
         ext = '.mp3';
         opt.default_name = path.parse(opt.default_name).name + ext;
       }
