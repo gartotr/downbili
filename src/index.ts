@@ -8,28 +8,26 @@ import type { Option } from './types/types';
  * @param {Option} opt
  */
 const downBili = async (opt: Option) => {
-  return new Promise(async resolve => {
-    let { url, level = ArticulationEnum._16 } = opt;
-    if (!url) {
-      // 如果不存在就直接报错
-      throw new Error('opt.url is not defined!');
-    }
+  let { url, level = ArticulationEnum._16 } = opt;
+  if (!url) {
+    // 如果不存在就直接报错
+    throw new Error('opt.url is not defined!');
+  }
 
-    const requeseHeader = {
-      Referer: url,
-      Cookie: '',
-      'User-Agent': UserAgent,
-    };
+  const requeseHeader = {
+    Referer: url,
+    Cookie: '',
+    'User-Agent': UserAgent,
+  };
 
-    if (opt.sessdata) {
-      requeseHeader['Cookie'] = 'SESSDATA=' + opt.sessdata;
-      level = ArticulationEnum._1080PLUS;
-      opt.level = opt.level ?? ArticulationEnum._1080PLUS; // 有会员获取的视频自动设置为1080p+
-    }
-    const addr = await getVideoDownLinkByurl(url, level);
-    const dealResult = await deallink(opt, requeseHeader, addr, url);
-    resolve(dealResult);
-  });
+  if (opt.sessdata) {
+    requeseHeader['Cookie'] = 'SESSDATA=' + opt.sessdata;
+    level = ArticulationEnum._1080PLUS;
+    opt.level = opt.level ?? ArticulationEnum._1080PLUS; // 有会员获取的视频自动设置为1080p+
+  }
+  const addr = await getVideoDownLinkByurl(url, level);
+  const dealResult = await deallink(opt, requeseHeader, addr, url);
+  return dealResult;
 };
 
 export { downBili };

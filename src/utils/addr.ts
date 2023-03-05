@@ -9,6 +9,9 @@ type OrString = string | string[];
 
 export async function deallink(opt: Option, options: Record<string, string>, addr: OrString, videourl: OrString): Promise<unknown> {
   return new Promise(async resolve => {
+    if (Array.isArray(addr)) {
+      addr = addr[0];
+    }
     const res = await $.get({
       url: addr,
       headers: options,
@@ -17,9 +20,9 @@ export async function deallink(opt: Option, options: Record<string, string>, add
 
     if (data.code === -404 && data.message !== 'success') {
       if (opt.type && opt.type !== 'default') {
-        throw new Error(`${opt.url} can't be divided into ${opt.type} mode`);
+        throw new Error(`请对应url视频类型`);
       } else {
-        throw new Error('You should enter the sessdata！');
+        throw new Error('请传入sessdata!！');
       }
     }
 
