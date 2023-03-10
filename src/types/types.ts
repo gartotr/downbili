@@ -6,6 +6,12 @@ export interface OptionsType {
   headers: NodeJS.Dict<OutgoingHttpHeader>;
 }
 
+export interface RequestHeaderType {
+  [key: string]: string;
+}
+
+export type OrString = string | string[];
+
 export interface IVideoComments {
   member: {
     mid: string;
