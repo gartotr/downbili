@@ -31,3 +31,4 @@ const downBili = async (opt: Option) => {
 };
 
 export { downBili };
+export * from './exports';
