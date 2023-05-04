@@ -11,7 +11,7 @@ export function progressWithCookie(res: any, opt: Option & { progress?: Progress
   return new Promise((resolve, _reject) => {
     const defaultCb = () => console.log('\n 下载成功！ \n');
 
-    const { progress, folder = 'media', name, oncomplete = defaultCb } = opt;
+    const { progress, folder = 'media', name, onComplete = defaultCb } = opt;
     const labelname = progress?.labelname ?? '正在下载：';
     const progressLength = progress?.length ?? 50;
 
@@ -39,7 +39,7 @@ export function progressWithCookie(res: any, opt: Option & { progress?: Progress
       pb.render({ completed, total });
     });
     res.on('end', () => {
-      oncomplete();
+      onComplete();
       resolve(res);
     });
     res.on('error', (err: any) => {
@@ -74,7 +74,7 @@ export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
       pb.render({ completed, total });
     });
     const defaultCb = () => console.log('\nDownload complete!\n');
-    const cb = opt.oncomplete || defaultCb;
+    const cb = opt.onComplete || defaultCb;
     const d = { opt: 'opt' };
     res.on('end', () => {
       cb();
