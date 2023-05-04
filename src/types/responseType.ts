@@ -154,3 +154,7 @@ export interface DownloadInfo {
 }
 
 export type DownloadObject = Response<DownloadInfo> & { result: { dash: any } };
+
+export interface DownLoadRequestResult {
+  text: string;
+}

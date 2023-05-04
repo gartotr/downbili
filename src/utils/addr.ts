@@ -1,9 +1,9 @@
 import * as deal from './deal';
 import type { Option, OrString, RequestHeaderType } from '../types/types';
-import { DownloadObject, Durl } from '../types/responseType';
+import { DownloadObject, Durl, DownLoadRequestResult } from '../types/responseType';
 import { VideoTypeEnum } from '../constant';
 
-const $ = require('websect');
+const websect = require('websect');
 const path = require('path');
 
 export async function deallink(opt: Option, options: RequestHeaderType, addr: OrString, videourl: OrString): Promise<unknown> {
@@ -11,7 +11,7 @@ export async function deallink(opt: Option, options: RequestHeaderType, addr: Or
     if (Array.isArray(addr)) {
       addr = addr[0];
     }
-    const res = await $.get({
+    const res: DownLoadRequestResult = await websect.get({
       url: addr,
       headers: options,
     });
@@ -35,7 +35,7 @@ export async function deallink(opt: Option, options: RequestHeaderType, addr: Or
         const match = ul.match(/\/([^\/]+?)\?/) || [];
         opt.default_name = match[1].trim();
         const filename = opt.filename;
-        let ext: any = path.parse(opt.default_name).ext;
+        let ext: string = path.parse(opt.default_name).ext;
 
         if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
           ext = '.mp4';
