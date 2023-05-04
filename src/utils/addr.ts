@@ -31,24 +31,21 @@ export async function deallink(opt: Option, options: RequestHeaderType, addr: Or
     }
 
     if (durl.length > 1) {
-      for (const [_index, { url: ul }] of durl.entries()) {
+      for (let i = 0; i < durl.length; i++) {
+        const ul = durl[i].url;
         const match = ul.match(/\/([^\/]+?)\?/) || [];
         opt.default_name = match[1].trim();
         const filename = opt.filename;
         let ext: string = path.parse(opt.default_name).ext;
-
         if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
           ext = '.mp4';
           opt.default_name = path.parse(opt.default_name).name + ext;
         }
-
         if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
           ext = '.mp3';
           opt.default_name = path.parse(opt.default_name).name + ext;
         }
-
         opt.name = (filename && filename + ext) || opt.default_name;
-
         await deal.downloadOne(opt, ul, videourl);
       }
     } else {
