@@ -1,3 +1,4 @@
 src
 pnpm-lock.yaml
 .prettierrc.json
+tsconfig.json
