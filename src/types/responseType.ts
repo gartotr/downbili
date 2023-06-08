@@ -163,3 +163,7 @@ export interface hettpGetResponseType {
   pipe: Function;
   on: Function;
 }
+
+export interface DownLoadRequestResult {
+  text: string;
+}

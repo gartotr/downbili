@@ -1,7 +1,7 @@
 import { deallink } from './utils/addr';
 import { getVideoDownLinkByurl } from './utils/download';
 import { UserAgent, ArticulationEnum } from './constant';
-import type { Option } from './types/types';
+import type { Option, RequestHeaderType } from './types/types';
 
 /**
  * 下载哔哩哔哩的视频
@@ -11,10 +11,10 @@ const downBili = async (opt: Option) => {
   let { url, level = ArticulationEnum._16 } = opt;
   if (!url) {
     // 如果不存在就直接报错
-    throw new Error('opt.url is not defined!');
+    throw new Error('必须传入url!!');
   }
 
-  const requeseHeader = {
+  const requeseHeader: RequestHeaderType = {
     Referer: url,
     Cookie: '',
     'User-Agent': UserAgent,
@@ -31,3 +31,4 @@ const downBili = async (opt: Option) => {
 };
 
 export { downBili };
+export * from './exports';

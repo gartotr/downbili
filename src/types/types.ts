@@ -6,6 +6,12 @@ export interface OptionsType {
   headers: NodeJS.Dict<OutgoingHttpHeader>;
 }
 
+export interface RequestHeaderType {
+  [key: string]: string;
+}
+
+export type OrString = string | string[];
+
 export interface IVideoComments {
   member: {
     mid: string;
@@ -38,7 +44,7 @@ export interface IDownloadOption {
   name: string;
   type?: keyof typeof VideoTypeEnum;
   folder?: string;
-  oncomplete?: () => void;
+  onComplete?: () => void;
 }
 
 export interface ProgressOptions {
@@ -147,5 +153,5 @@ export interface Option {
   /**
    * 执行成功的回调
    */
-  oncomplete?: () => void;
+  onComplete?: () => void;
 }

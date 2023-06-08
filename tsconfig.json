@@ -6,7 +6,8 @@
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "outDir": "lib",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
     "lib": ["es6"],
     "noUnusedLocals": true,
@@ -18,5 +19,5 @@
     "noImplicitAny": false
   },
   "include": ["./src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

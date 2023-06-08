@@ -12,7 +12,7 @@ export function progressWithCookie(res: hettpGetResponseType, opt: Option & { pr
   return new Promise((resolve, _reject) => {
     const defaultCb = () => console.log('\n 下载成功！ \n');
 
-    const { progress, folder = 'media', name, oncomplete = defaultCb } = opt;
+    const { progress, folder = 'media', name, onComplete = defaultCb } = opt;
     const labelname = progress?.labelname ?? '正在下载：';
     const progressLength = progress?.length ?? 50;
 
@@ -40,7 +40,7 @@ export function progressWithCookie(res: hettpGetResponseType, opt: Option & { pr
       pb.render({ completed, total });
     });
     res.on('end', () => {
-      oncomplete();
+      onComplete();
       resolve(res);
     });
     res.on('error', (err: Record<string, string>) => {
@@ -75,7 +75,7 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
       pb.render({ completed, total });
     });
     const defaultCb = () => console.log('\nDownload complete!\n');
-    const cb = opt.oncomplete || defaultCb;
+    const cb = opt.onComplete || defaultCb;
     const d = { opt: 'opt' };
     res.on('end', () => {
       cb();
