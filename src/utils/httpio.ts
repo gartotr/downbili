@@ -1,11 +1,12 @@
 import { get, RequestOptions, IncomingMessage } from 'http';
 import type { OptionsType } from '../types/types';
+import type { hettpGetResponseType } from '../types/responseType';
 
-const parse = require('url').parse
-const _get = require('https').get
+const parse = require('url').parse;
+const _get = require('https').get;
 
 // 解决重定向的问题
-export const _redirect = (res: IncomingMessage, opt: OptionsType) => {
+export const _redirect = (res: IncomingMessage, opt: OptionsType): Promise<hettpGetResponseType | IncomingMessage> => {
   let reurl = res.headers.location;
   if (reurl) {
     opt.url = reurl;
@@ -15,7 +16,7 @@ export const _redirect = (res: IncomingMessage, opt: OptionsType) => {
       });
     });
   }
-  return res;
+  return Promise.resolve(res);
 };
 
 /**
@@ -23,7 +24,7 @@ export const _redirect = (res: IncomingMessage, opt: OptionsType) => {
  * @param {OptionsType} opt
  * @returns
  */
-export const httpGet = (opt: OptionsType) => {
+export const httpGet = (opt: OptionsType): Promise<hettpGetResponseType> => {
   let options: RequestOptions = {};
   let ul: string = '';
   let protocol: string | null = '';

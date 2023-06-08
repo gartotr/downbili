@@ -154,3 +154,12 @@ export interface DownloadInfo {
 }
 
 export type DownloadObject = Response<DownloadInfo> & { result: { dash: any } };
+
+/**
+ * httpGet返回
+ */
+export interface hettpGetResponseType {
+  headers: Object;
+  pipe: Function;
+  on: Function;
+}

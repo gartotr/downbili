@@ -1,13 +1,14 @@
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
 import type { Option, ProgressOptions } from '../types/types';
+import type { hettpGetResponseType } from '../types/responseType';
 import { VideoTypeEnum } from '../constant';
 import { printType } from '.';
 
 const fs = require('fs');
 const path = require('path');
 
-export function progressWithCookie(res: any, opt: Option & { progress?: ProgressOptions }): Promise<any> {
+export function progressWithCookie(res: hettpGetResponseType, opt: Option & { progress?: ProgressOptions }): Promise<hettpGetResponseType> {
   return new Promise((resolve, _reject) => {
     const defaultCb = () => console.log('\n 下载成功！ \n');
 
@@ -34,7 +35,7 @@ export function progressWithCookie(res: any, opt: Option & { progress?: Progress
 
     res.pipe(fs.createWriteStream(fpath));
     let completed = 0;
-    res.on('data', (chunk: any) => {
+    res.on('data', (chunk: Record<string, string>[]) => {
       completed += chunk.length;
       pb.render({ completed, total });
     });
@@ -42,13 +43,13 @@ export function progressWithCookie(res: any, opt: Option & { progress?: Progress
       oncomplete();
       resolve(res);
     });
-    res.on('error', (err: any) => {
+    res.on('error', (err: Record<string, string>) => {
       throw err;
     });
   });
 }
 
-export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
+export function progressWithoutCookie(res: Record<string, any>, opt: Option): Promise<hettpGetResponseType | any> {
   return new Promise((resolve, _reject) => {
     const pb = new ProgressBar('Download progress', 50);
     const headers = res.headers;
@@ -69,7 +70,7 @@ export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
 
     res.pipe(fs.createWriteStream(fpath));
     let completed = 0;
-    res.on('data', (chunk: any) => {
+    res.on('data', (chunk: Record<string, string>[]) => {
       completed += chunk.length;
       pb.render({ completed, total });
     });
@@ -80,7 +81,7 @@ export function progressWithoutCookie(res: any, opt: Option): Promise<any> {
       cb();
       resolve(d);
     });
-    res.on('error', (err: any) => {
+    res.on('error', (err: Record<string, string>) => {
       throw err;
     });
   });
