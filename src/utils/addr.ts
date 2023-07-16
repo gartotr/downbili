@@ -1,12 +1,12 @@
 import * as deal from './deal';
 import type { Option, OrString, RequestHeaderType } from '../types/types';
-import { DownloadObject, Durl, DownLoadRequestResult } from '../types/responseType';
+import { DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from '../types/responseType';
 import { VideoTypeEnum } from '../constant';
 
 const websect = require('websect');
 const path = require('path');
 
-export async function deallink(opt: Option, options: RequestHeaderType, addr: OrString, videourl: OrString): Promise<unknown> {
+export async function deallink(opt: Option, options: RequestHeaderType, addr: OrString, videourl: OrString): Promise<DownFileMessage> {
   return new Promise(async resolve => {
     if (Array.isArray(addr)) {
       addr = addr[0];

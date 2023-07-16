@@ -1,7 +1,7 @@
-import {deallink} from './utils/addr';
-import {getVideoDownLinkByurl} from './utils/download';
-import {ArticulationEnum, UserAgent} from './constant';
-import type {Option, RequestHeaderType} from './types/types';
+import { deallink } from './utils/addr';
+import { getVideoDownLinkByurl } from './utils/download';
+import { ArticulationEnum, UserAgent } from './constant';
+import type { Option, RequestHeaderType } from './types/types';
 
 /**
  * 下载哔哩哔哩的视频

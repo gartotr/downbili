@@ -167,3 +167,18 @@ export interface hettpGetResponseType {
 export interface DownLoadRequestResult {
   text: string;
 }
+
+export interface DownFileMessage {
+  /**
+   * 文件路径
+   */
+  fpath: string;
+  /**
+   * 当前目录
+   */
+  cwd: string;
+  /**
+   * 文件名称
+   */
+  name: string;
+}
