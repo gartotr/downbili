@@ -1,13 +1,11 @@
-import { deallink } from './utils/addr';
-import { getVideoDownLinkByurl } from './utils/download';
-import { ArticulationEnum, UserAgent } from './constant';
+import { getVideoDownLinkByurl, deallink, ArticulationEnum, UserAgent } from './exports';
 import type { Option, RequestHeaderType } from './types/types';
 
 /**
  * 下载哔哩哔哩的视频
  * @param {Option} opt
  */
-const downBili = async (opt: Option) => {
+export const downBili = async (opt: Option) => {
   let { url, level = ArticulationEnum._16 } = opt;
   if (!url) {
     // 如果不存在就直接报错
@@ -29,5 +27,3 @@ const downBili = async (opt: Option) => {
   return await deallink(opt, requestHeader, addr, url);
 };
 
-export { downBili };
-export * from './exports';
