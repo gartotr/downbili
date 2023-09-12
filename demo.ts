@@ -1,8 +1,9 @@
-import { downBili } from './dist';
+import { downBili } from './src';
 
-const url = 'https://www.bilibili.com/video/BV1Wk4y1v7Sd/?spm_id_from=333.1007.tianma.1-1-1.click&vd_source=b913fad6df7625454c51e2a2e9e72333';
+const url = 'https://www.bilibili.com/video/BV1pa4y1A7sv/?spm_id_from=333.1073.channel.secondary_floor_video.click';
 
 const main = async () => {
+  console.log('[ 123 ] >', 123)
   await downBili({
     url,
   });

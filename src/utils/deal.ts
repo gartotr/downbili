@@ -2,6 +2,7 @@ import { httpGet } from './httpio';
 import * as assist from './assist';
 import type { Option } from '../types/types';
 import type { DownFileMessage, hettpGetResponseType } from '../types/responseType';
+import { UserAgent } from '../constant'
 
 interface Headers {
   [key: string]: string | string[];
@@ -16,10 +17,9 @@ interface Headers {
 export async function downloadOne(options: Option, url: string, referer: string | string[]): Promise<DownFileMessage> {
   const headers: Headers = {
     Referer: referer,
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Safari/605.1.15',
+    'User-Agent': UserAgent,
   };
   const response: hettpGetResponseType = await httpGet({ url, headers });
-  console.log('response', response);
 
   if (response.headers['content-type'] === 'video/x-flv') {
     return assist.progressWithCookie(response, options);
