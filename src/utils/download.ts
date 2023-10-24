@@ -1,4 +1,4 @@
-import { getavByurl } from './getVarious';
+import { getAvByurl } from './getVarious';
 import { parse as _parse } from 'path';
 import { httpGet as _get } from './httpio';
 import { ArticulationEnum, PLAYURL_API } from '../constant';
@@ -47,7 +47,7 @@ export const initialUrl = (av: string, cid: number, level: ArticulationEnum): st
  * 根据 视频的av号 获取 视频的下载链接信息
  * @param {string} av 视频的av号
  * @param {number} level 视频的清晰度
- * @returns {Promise<string | string[]>}
+ * @returns {Promise<string | string[]>} B站视频下载地址
  */
 export const getVideoDownloadLinkByav = async (av: string, level: ArticulationEnum = ArticulationEnum._16): Promise<string | string[]> => {
   const info = await getVideoIntroByav(av);
@@ -70,10 +70,11 @@ export const getVideoDownloadLinkByav = async (av: string, level: ArticulationEn
 /**
  * 根据 视频播放地址 获取 视频的下载链接信息
  * @param {string} url 视频的播放地址
- * @param {ArticulationEnum} level
+ * @param {ArticulationEnum} level  
+ * @returns B站视频下载地址
  */
 export const getVideoDownLinkByurl = async (url: string, level: ArticulationEnum): Promise<string | string[]> => {
-  const res = await getavByurl(url);
+  const res = await getAvByurl(url);
   const data = await getVideoDownloadLinkByav(res, level);
   return data;
 };

@@ -1,7 +1,7 @@
 import { parse } from 'url';
 import websect, { get as websectGet } from 'websect';
 
-import { isavurl, isepurl } from '.';
+import { isAvurl, isEpurl } from '.';
 import { PAGE_LIST_API, WEB_INTERFACE_API } from '../constant';
 import type { PlayerResponse, PlayerTextObject, WebData, WebResponse, WebTextObject } from '../types/responseType';
 
@@ -77,7 +77,7 @@ export function get_bvid(url: string): string {
  * @param {string} bvid
  * @returns
  */
-export async function get_cid(bvid: string): Promise<number> {
+export async function getCid(bvid: string): Promise<number> {
   const api: string = `${PAGE_LIST_API}?bvid=${bvid}&jsonp=jsonp`;
   const res: PlayerResponse = await reero(api);
   const parseText: PlayerTextObject = JSON.parse(res.text);
@@ -89,9 +89,9 @@ export async function get_cid(bvid: string): Promise<number> {
  * @param {string} bvidurl
  * @returns {WebData}
  */
-export async function get_view_by_bvidurl(bvidurl: string): Promise<WebData> {
+export async function getViewByBvidUrl(bvidurl: string): Promise<WebData> {
   const bvid: string = get_bvid(bvidurl);
-  const cid: number = await get_cid(bvid);
+  const cid: number = await getCid(bvid);
   const api: string = `${WEB_INTERFACE_API}?cid=${cid}&bvid=${bvid}`;
   const res: WebResponse = await reero(api);
   const parseText: WebTextObject = JSON.parse(res.text);
@@ -103,8 +103,8 @@ export async function get_view_by_bvidurl(bvidurl: string): Promise<WebData> {
  * @param {string} bvidurl
  * @returns {number}
  */
-export async function get_aid_by_bvidurl(bvidurl: string): Promise<number> {
-  const { aid } = await get_view_by_bvidurl(bvidurl);
+export async function getAidByBvidurl(bvidurl: string): Promise<number> {
+  const { aid } = await getViewByBvidUrl(bvidurl);
   return aid;
 }
 
@@ -113,7 +113,7 @@ export async function get_aid_by_bvidurl(bvidurl: string): Promise<number> {
  * @param {string} url
  * @returns {string}
  */
-export function get_mid_by_url(url: string): string {
+export function getMidByUrl(url: string): string {
   const matched = url.match(/md(\d+)/) || ['', ''];
   return matched[1];
 }
@@ -134,17 +134,17 @@ export async function getVideoMessageByav(av: string): Promise<WebTextObject> {
  * @param {string} url 视频的播放地址
  * @returns {Promise<string>}
  */
-export async function getavByurl(url: string): Promise<string> {
-  if (isavurl(url)) {
+export async function getAvByurl(url: string): Promise<string> {
+  if (isAvurl(url)) {
     return getavByavurl(url);
   }
   // 判断是不是番剧的播放地址
-  if (isepurl(url)) {
+  if (isEpurl(url)) {
     return await getavByepurl(url);
   }
   // 判断是不是视频地址
   if (isbvidurl(url)) {
-    const aid = await get_aid_by_bvidurl(url);
+    const aid = await getAidByBvidurl(url);
     return String(aid);
   }
   return '';

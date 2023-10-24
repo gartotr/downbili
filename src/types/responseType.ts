@@ -153,6 +153,9 @@ export interface DownloadInfo {
   last_play_cid: number;
 }
 
+/**
+ * 下载对象
+ */
 export type DownloadObject = Response<DownloadInfo> & { result: { dash: any } };
 
 /**
@@ -168,6 +171,9 @@ export interface DownLoadRequestResult {
   text: string;
 }
 
+/**
+ * 下载完成后返回信息
+ */
 export interface DownFileMessage {
   /**
    * 文件路径

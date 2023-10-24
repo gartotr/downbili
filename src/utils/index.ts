@@ -52,7 +52,7 @@ export function createfolder(ul: string) {
  * @param {string} url
  * @returns {boolean}
  */
-export function isepurl(url: string): boolean {
+export function isEpurl(url: string): boolean {
   return /ep\d+/g.test(url);
 }
 
@@ -61,7 +61,7 @@ export function isepurl(url: string): boolean {
  * @param {string} url
  * @returns {boolean}
  */
-export function isavurl(url: string): boolean {
+export function isAvurl(url: string): boolean {
   return /av\d+/g.test(url);
 }
 
@@ -70,7 +70,7 @@ export function isavurl(url: string): boolean {
  * @param {string} url
  * @returns {boolean}
  */
-export function ismdurl(url: string): boolean {
+export function isMdurl(url: string): boolean {
   return /md\d+/g.test(url);
 }
 

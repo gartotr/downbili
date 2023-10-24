@@ -6,7 +6,15 @@ import { VideoTypeEnum } from '../constant';
 const websect = require('websect');
 const path = require('path');
 
-export async function deallink(opt: Option, options: RequestHeaderType, addr: OrString, videourl: OrString): Promise<DownFileMessage> {
+/**
+ * 输入链接下载视频
+ * @param {Option} opt 视频下载配置
+ * @param {RequestHeaderType} options http请求头
+ * @param {OrString} addr B站视频下载地址
+ * @param {OrString} videoUrl 视频url
+ * @returns {Promise<DownFileMessage>} 下载完成后返回信息
+ */
+export async function deallink(opt: Option, options: RequestHeaderType, addr: OrString, videoUrl: OrString): Promise<DownFileMessage> {
   return new Promise(async resolve => {
     if (Array.isArray(addr)) {
       addr = addr[0];
@@ -46,7 +54,7 @@ export async function deallink(opt: Option, options: RequestHeaderType, addr: Or
           opt.default_name = path.parse(opt.default_name).name + ext;
         }
         opt.name = (filename && filename + ext) || opt.default_name;
-        await deal.downloadOne(opt, ul, videourl);
+        await deal.downloadOne(opt, ul, videoUrl);
       }
     } else {
       const ul = durl[0].url;
@@ -67,7 +75,7 @@ export async function deallink(opt: Option, options: RequestHeaderType, addr: Or
 
       opt.name = (filename && filename + ext) || opt.default_name;
 
-      const result = await deal.downloadOne(opt, ul, videourl);
+      const result = await deal.downloadOne(opt, ul, videoUrl);
       resolve(result);
     }
   });
