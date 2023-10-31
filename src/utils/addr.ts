@@ -14,7 +14,7 @@ const path = require('path');
  * @param {OrString} videoUrl 视频url
  * @returns {Promise<DownFileMessage>} 下载完成后返回信息
  */
-export async function deallink(opt: Option, options: RequestHeaderType, addr: OrString, videoUrl: OrString): Promise<DownFileMessage> {
+export async function dealLink(opt: Option, options: RequestHeaderType, addr: OrString, videoUrl: OrString): Promise<DownFileMessage> {
   return new Promise(async resolve => {
     if (Array.isArray(addr)) {
       addr = addr[0];

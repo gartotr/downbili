@@ -25,14 +25,14 @@ export function getavByavurl(avurl: string): string {
 export async function getavByepurl(epurl: string): Promise<string> {
   try {
     const res = await websectGet(epurl);
-    const htmlstr = res.uncompress().toString();
-    const avLinks = websect(htmlstr).find('a.av-link');
+    const htmlStr = res.uncompress().toString();
+    const avLinks = websect(htmlStr).find('a.av-link');
 
     if (avLinks.length > 0) {
       const av = avLinks[0].innerHTML.replace('AV', '');
       // 使用正则表达式查找并提取 av 号
       const reg = new RegExp('"aid":(\\d+?),"bvid":"' + av + '"', 'g');
-      const match = reg.exec(htmlstr);
+      const match = reg.exec(htmlStr);
 
       if (match && match[1]) {
         return match[1];

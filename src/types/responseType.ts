@@ -161,12 +161,15 @@ export type DownloadObject = Response<DownloadInfo> & { result: { dash: any } };
 /**
  * httpGet返回
  */
-export interface hettpGetResponseType {
+export interface httpGetResponseType {
   headers: Object;
   pipe: Function;
   on: Function;
 }
 
+/**
+ * websect.get返回
+ */
 export interface DownLoadRequestResult {
   text: string;
 }

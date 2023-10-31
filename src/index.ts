@@ -1,4 +1,4 @@
-import { getVideoDownLinkByurl, deallink, ArticulationEnum, UserAgent } from './exports';
+import { getVideoDownLinkByurl, dealLink, ArticulationEnum, UserAgent } from './exports';
 import type { Option, RequestHeaderType } from './types/types';
 
 /**
@@ -23,5 +23,5 @@ export const downBili = async (opt: Option) => {
     opt.level = opt.level ?? ArticulationEnum._1080PLUS; // 有会员获取的视频自动设置为1080p+
   }
   const addr = await getVideoDownLinkByurl(url, level);
-  return await deallink(opt, requestHeader, addr, url);
+  return await dealLink(opt, requestHeader, addr, url);
 };

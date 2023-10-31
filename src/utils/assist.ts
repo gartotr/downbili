@@ -1,22 +1,22 @@
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
 import type { Option, ProgressOptions } from '../types/types';
-import type { hettpGetResponseType, DownFileMessage } from '../types/responseType';
+import type { httpGetResponseType, DownFileMessage } from '../types/responseType';
 import { VideoTypeEnum } from '../constant';
 import { printType } from '.';
 
 const fs = require('fs');
 const path = require('path');
 
-export function progressWithCookie(res: hettpGetResponseType, opt: Option & { progress?: ProgressOptions }): Promise<DownFileMessage> {
+export function progressWithCookie(res: httpGetResponseType, opt: Option & { progress?: ProgressOptions }): Promise<DownFileMessage> {
   return new Promise((resolve, _reject) => {
     const defaultCb = () => console.log('\n 下载成功！ \n');
 
     const { progress, folder = 'media', name, onComplete = defaultCb } = opt;
-    const labelname = progress?.labelname ?? '正在下载：';
+    const labelName = progress?.labelname ?? '正在下载：';
     const progressLength = progress?.length ?? 50;
 
-    const pb = new ProgressBar(labelname, progressLength);
+    const pb = new ProgressBar(labelName, progressLength);
     const headers = res.headers;
     const total = headers['content-length'];
     const dir = path.join(process.cwd(), folder);

@@ -1,9 +1,6 @@
-import { getAvByurl } from './getVarious';
-import { parse as _parse } from 'path';
-import { httpGet as _get } from './httpio';
-import { ArticulationEnum, PLAYURL_API } from '../constant';
-import { getVideoMessageByav } from './getVarious';
-import type { IWebInfo } from '../types/responseType';
+import { getAvByurl, getVideoMessageByav } from "./getVarious";
+import { ArticulationEnum, PLAYURL_API } from "../constant";
+import type { IWebInfo } from "../types/responseType";
 
 /**
  * 再次对视频的信息进行一次封装
@@ -12,7 +9,7 @@ import type { IWebInfo } from '../types/responseType';
  */
 export const getVideoIntroByav = async (av: string): Promise<IWebInfo> => {
   const { data } = await getVideoMessageByav(av);
-  const info: IWebInfo = {
+  return {
     aid: data.aid,
     tid: data.tid,
     tname: data.tname,
@@ -29,7 +26,6 @@ export const getVideoIntroByav = async (av: string): Promise<IWebInfo> => {
     pages: data.pages,
     redirect_url: data.redirect_url,
   };
-  return info;
 };
 
 /**
@@ -62,19 +58,17 @@ export const getVideoDownloadLinkByav = async (av: string, level: ArticulationEn
     return links;
   } else {
     const cid = info.cid;
-    const link = initialUrl(av, cid, level);
-    return link;
+    return initialUrl(av, cid, level);
   }
 };
 
 /**
  * 根据 视频播放地址 获取 视频的下载链接信息
  * @param {string} url 视频的播放地址
- * @param {ArticulationEnum} level  
+ * @param {ArticulationEnum} level
  * @returns B站视频下载地址
  */
 export const getVideoDownLinkByurl = async (url: string, level: ArticulationEnum): Promise<string | string[]> => {
   const res = await getAvByurl(url);
-  const data = await getVideoDownloadLinkByav(res, level);
-  return data;
+  return await getVideoDownloadLinkByav(res, level);
 };
