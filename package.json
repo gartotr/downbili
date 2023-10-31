@@ -1,7 +1,7 @@
 {
   "name": "downbili",
-  "version": "0.2.1",
-  "description": "fock ibili 下载视频转音频用",
+  "version": "0.2.2",
+  "description": "fock ibili 下载视频",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
