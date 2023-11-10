@@ -52,16 +52,6 @@ export interface ProgressOptions {
   length?: number;
 }
 
-export interface DeallinkOptions {
-  type?: 'silent' | 'audio' | 'default';
-  level?: number;
-  filename?: string;
-  download_backup?: boolean;
-  default_name: string;
-  url: string;
-  name: string;
-}
-
 export interface DanmuResponse {
   order: number;
   date: string;
@@ -131,11 +121,11 @@ export interface Option {
    */
   sessdata?: string;
   /**
-   * 默认名称
+   * 默认名称（自己获取）
    */
-  default_name?: string;
+  defaultName?: string;
   /**
-   * 名称
+   * 文件名称（自己获取）
    */
   name?: string;
   /**
@@ -145,7 +135,7 @@ export interface Option {
   /**
    * file名称
    */
-  filename?: string;
+  fileName?: string;
   /**
    * folder
    */

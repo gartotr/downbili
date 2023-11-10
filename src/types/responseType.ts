@@ -115,10 +115,25 @@ export interface IWebInfo {
 }
 
 export interface Durl {
+  /**
+   * 不知道
+   */
   order: number;
+  /**
+   * 视频时长（毫秒）
+   */
   length: number;
+  /**
+   * 视频大小
+   */
   size: number;
+  /**
+   * 不知道
+   */
   ahead: string;
+  /**
+   * 不知道
+   */
   vhead: string;
   url: string;
   backup_url: string[];
@@ -181,7 +196,7 @@ export interface DownFileMessage {
   /**
    * 文件路径
    */
-  fpath: string;
+  fPath: string;
   /**
    * 当前目录
    */

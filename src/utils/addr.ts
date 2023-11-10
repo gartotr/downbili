@@ -42,38 +42,39 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
       for (let i = 0; i < durl.length; i++) {
         const ul = durl[i].url;
         const match = ul.match(/\/([^\/]+?)\?/) || [];
-        opt.default_name = match[1].trim();
-        const filename = opt.filename;
-        let ext: string = path.parse(opt.default_name).ext;
+        opt.defaultName = match[1].trim();
+        const fileName = opt.fileName;
+        let ext: string = path.parse(opt.defaultName).ext;
         if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
           ext = '.mp4';
-          opt.default_name = path.parse(opt.default_name).name + ext;
+          opt.defaultName = path.parse(opt.defaultName).name + ext;
         }
         if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
           ext = '.mp3';
-          opt.default_name = path.parse(opt.default_name).name + ext;
+          opt.defaultName = path.parse(opt.defaultName).name + ext;
         }
-        opt.name = (filename && filename + ext) || opt.default_name;
+        opt.name = (fileName && fileName + ext) || opt.defaultName;
         await deal.downloadOne(opt, ul, videoUrl);
       }
     } else {
       const ul = durl[0].url;
       const match = ul.match(/\/([^\/]+?)\?/) || [];
-      opt.default_name = match[1].trim();
-      const filename = opt.filename;
-      let ext = path.parse(opt.default_name).ext;
+      opt.defaultName = match[1].trim();
+      const fileName = opt.fileName;
+      // 解析文件后缀名称
+      let ext = path.parse(opt.defaultName).ext;
 
       if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
         ext = '.mp4';
-        opt.default_name = path.parse(opt.default_name).name + ext;
+        opt.defaultName = path.parse(opt.defaultName).name + ext;
       }
 
       if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
         ext = '.mp3';
-        opt.default_name = path.parse(opt.default_name).name + ext;
+        opt.defaultName = path.parse(opt.defaultName).name + ext;
       }
 
-      opt.name = (filename && filename + ext) || opt.default_name;
+      opt.name = (fileName && fileName + ext) || opt.defaultName;
 
       const result = await deal.downloadOne(opt, ul, videoUrl);
       resolve(result);

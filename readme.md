@@ -13,10 +13,9 @@ B站URL下载视频
 | url          | 视频URL                                        |
 | level        | 112是1080P+，80是1080P，64是720P+，32是480P，16是360P |
 | sessdata     | 你的sessdata                                   |
-| default_name | 默认名称                                         |
 | name         | 名称                                           |
 | type         | 视频类型                                         |
-| filename     | 文件名称                                         |
+| fileName     | 文件名称                                         |
 | folder       | folder                                       |
 | onComplete   | 执行成功的回调                                      |
 
@@ -24,7 +23,7 @@ B站URL下载视频
 
 | **参数** | **描述**  |
 |--------|---------|
-| fpath  | 视频路径    |
+| fPath  | 视频路径    |
 | cwd    | 当前文件的目录 |
 | name   | 视频名称    |
 
@@ -40,7 +39,7 @@ import { downBili } from 'downBili';
 // 输入对应URL
 const option = {
   url: "xxx",
-  filename: "指定文件名",
+  fileName: "指定文件名",
   onComplete: () => {
     console.log("下载成功！")
   }

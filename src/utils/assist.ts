@@ -21,7 +21,7 @@ export function progressWithCookie(res: httpGetResponseType, opt: Option & { pro
     const total = headers['content-length'];
     const dir = path.join(process.cwd(), folder);
     createfolder(folder);
-    const fpath = path.join(dir, name);
+    const fPath = path.join(dir, name);
 
     if (!opt.type || name === VideoTypeEnum.default) {
       printType('视频', name, folder);
@@ -33,14 +33,14 @@ export function progressWithCookie(res: httpGetResponseType, opt: Option & { pro
       printType('音频', name, folder);
     }
 
-    res.pipe(fs.createWriteStream(fpath));
+    res.pipe(fs.createWriteStream(fPath));
     let completed = 0;
     res.on('data', (chunk: Record<string, string>[]) => {
       completed += chunk.length;
       pb.render({ completed, total });
     });
     const response: DownFileMessage = {
-      fpath,
+      fPath,
       cwd: process.cwd(),
       name: opt.name as string,
     };
@@ -61,7 +61,7 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
     const total = headers['content-length'];
     const folder = opt.folder ?? 'media';
     createfolder(folder);
-    const fpath = path.join(process.cwd(), folder, opt.name);
+    const fPath = path.join(process.cwd(), folder, opt.name);
 
     if (!opt.type || opt.name === 'default') {
       printType('视频', opt.name, opt.folder);
@@ -73,14 +73,14 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
       printType('音频', opt.name, opt.folder);
     }
 
-    res.pipe(fs.createWriteStream(fpath));
+    res.pipe(fs.createWriteStream(fPath));
     let completed = 0;
     res.on('data', (chunk: Record<string, string>[]) => {
       completed += chunk.length;
       pb.render({ completed, total });
     });
     const response: DownFileMessage = {
-      fpath,
+      fPath,
       cwd: process.cwd(),
       name: opt.name as string,
     };
