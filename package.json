@@ -20,9 +20,8 @@
   },
   "homepage": "https://github.com/gartotr/downbili#readme",
   "dependencies": {
-    "reero": "^1.0.4",
-    "single-line-log": "^1.1.2",
-    "websect": "^1.1.2"
+    "axios": "^1.6.2",
+    "single-line-log": "^1.1.2"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",

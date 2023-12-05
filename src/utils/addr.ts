@@ -1,10 +1,10 @@
-import * as deal from './deal';
-import type { Option, OrString, RequestHeaderType } from '../types/types';
-import { DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from '../types/responseType';
-import { VideoTypeEnum } from '../constant';
+import axios from "axios";
+import * as deal from "./deal";
+import type { Option, OrString, RequestHeaderType } from "../types/types";
+import { DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from "../types/responseType";
+import { VideoTypeEnum } from "../constant";
 
-const websect = require('websect');
-const path = require('path');
+const path = require("path");
 
 /**
  * 输入链接下载视频
@@ -19,19 +19,18 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
     if (Array.isArray(addr)) {
       addr = addr[0];
     }
-    const res: DownLoadRequestResult = await websect.get({
-      url: addr,
-      headers: options,
-    });
-    const data: DownloadObject = JSON.parse(res.text);
 
-    if (data.code === -404 && data.message !== 'success') {
+    const res: DownloadObject = await axios.get(addr, { headers: options });
+
+    if (res.code === -404 && res.message !== "success") {
       if (opt.type && opt.type !== VideoTypeEnum.default) {
         throw new Error(`请对应url视频类型`);
       } else {
-        throw new Error('请传入sessdata!！');
+        throw new Error("请传入sessdata!！");
       }
     }
+
+    const data: DownLoadRequestResult = res.data;
 
     let durl: Durl[] = [];
     if (!opt.type || opt.type === VideoTypeEnum.default) {
@@ -45,12 +44,12 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
         opt.defaultName = match[1].trim();
         const fileName = opt.fileName;
         let ext: string = path.parse(opt.defaultName).ext;
-        if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
-          ext = '.mp4';
+        if (ext === ".m4s" && opt.type === VideoTypeEnum.silent) {
+          ext = ".mp4";
           opt.defaultName = path.parse(opt.defaultName).name + ext;
         }
-        if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
-          ext = '.mp3';
+        if (ext === ".m4s" && opt.type === VideoTypeEnum.audio) {
+          ext = ".mp3";
           opt.defaultName = path.parse(opt.defaultName).name + ext;
         }
         opt.name = (fileName && fileName + ext) || opt.defaultName;
@@ -64,13 +63,13 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
       // 解析文件后缀名称
       let ext = path.parse(opt.defaultName).ext;
 
-      if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
-        ext = '.mp4';
+      if (ext === ".m4s" && opt.type === VideoTypeEnum.silent) {
+        ext = ".mp4";
         opt.defaultName = path.parse(opt.defaultName).name + ext;
       }
 
-      if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
-        ext = '.mp3';
+      if (ext === ".m4s" && opt.type === VideoTypeEnum.audio) {
+        ext = ".mp3";
         opt.defaultName = path.parse(opt.defaultName).name + ext;
       }
 

@@ -1,11 +1,9 @@
 import { parse } from 'url';
-import websect, { get as websectGet } from 'websect';
 
-import { isAvurl, isEpurl } from '.';
+import { isAvurl } from '.';
 import { PAGE_LIST_API, WEB_INTERFACE_API } from '../constant';
-import type { PlayerResponse, PlayerTextObject, WebData, WebResponse, WebTextObject } from '../types/responseType';
-
-const reero = require('reero');
+import type { PlayerTextObject, WebData, WebTextObjectData, WebTextObject } from '../types/responseType';
+import axios from 'axios';
 
 /**
  * 根据视频播放地址获取 视频的av号
@@ -16,36 +14,6 @@ export function getavByavurl(avurl: string): string {
   const path = parse(avurl).pathname;
   return path?.replace('/video/av', '') ?? '';
 }
-
-/**
- * 根据番剧地址获取 视频的av号
- * @param {string} epurl 视频的番剧地址
- * @returns {Promise<string>}
- */
-export async function getavByepurl(epurl: string): Promise<string> {
-  try {
-    const res = await websectGet(epurl);
-    const htmlStr = res.uncompress().toString();
-    const avLinks = websect(htmlStr).find('a.av-link');
-
-    if (avLinks.length > 0) {
-      const av = avLinks[0].innerHTML.replace('AV', '');
-      // 使用正则表达式查找并提取 av 号
-      const reg = new RegExp('"aid":(\\d+?),"bvid":"' + av + '"', 'g');
-      const match = reg.exec(htmlStr);
-
-      if (match && match[1]) {
-        return match[1];
-      }
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-
-  // 如果没有找到 av 号或出现错误，则返回空字符串
-  return '';
-}
-
 
 /**
  * 判断是不是bv的播放地址
@@ -79,9 +47,8 @@ export function get_bvid(url: string): string {
  */
 export async function getCid(bvid: string): Promise<number> {
   const api: string = `${PAGE_LIST_API}?bvid=${bvid}&jsonp=jsonp`;
-  const res: PlayerResponse = await reero(api);
-  const parseText: PlayerTextObject = JSON.parse(res.text);
-  return parseText.data[0].cid;
+  const res: PlayerTextObject = await axios.get(api);
+  return res.data.data[0].cid;
 }
 
 /**
@@ -93,9 +60,8 @@ export async function getViewByBvidUrl(bvidurl: string): Promise<WebData> {
   const bvid: string = get_bvid(bvidurl);
   const cid: number = await getCid(bvid);
   const api: string = `${WEB_INTERFACE_API}?cid=${cid}&bvid=${bvid}`;
-  const res: WebResponse = await reero(api);
-  const parseText: WebTextObject = JSON.parse(res.text);
-  return parseText.data;
+  const res: WebTextObjectData = await axios.get(api);
+  return res.data.data;
 }
 
 /**
@@ -125,8 +91,8 @@ export function getMidByUrl(url: string): string {
  */
 export async function getVideoMessageByav(av: string): Promise<WebTextObject> {
   const api = `${WEB_INTERFACE_API}?aid=${av}`;
-  const res: WebResponse = await websectGet(api);
-  return JSON.parse(res.text);
+  const res = await axios.get<WebTextObject>(api);
+  return res.data;
 }
 
 /**
@@ -138,14 +104,11 @@ export async function getAvByurl(url: string): Promise<string> {
   if (isAvurl(url)) {
     return getavByavurl(url);
   }
-  // 判断是不是番剧的播放地址
-  if (isEpurl(url)) {
-    return await getavByepurl(url);
-  }
+
   // 判断是不是视频地址
   if (isbvidurl(url)) {
     const aid = await getAidByBvidurl(url);
     return String(aid);
   }
-  return '';
+  throw new Error('获取视频信息失败！');
 }

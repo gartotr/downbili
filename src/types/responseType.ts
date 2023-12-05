@@ -31,7 +31,7 @@ export interface TextData {
   first_frame: string;
 }
 
-export type PlayerTextObject = Response<TextData[]>;
+export type PlayerTextObject = Response<{ data: TextData[] }>;
 
 /**
  * web-interface/view result
@@ -93,6 +93,8 @@ export interface WebData {
   stat: IStat;
   pages: IPage[];
 }
+
+export type WebTextObjectData = Response<{ data: WebData }>;
 
 export type WebTextObject = Response<WebData>;
 
@@ -171,7 +173,7 @@ export interface DownloadInfo {
 /**
  * 下载对象
  */
-export type DownloadObject = Response<DownloadInfo> & { result: { dash: any } };
+export type DownloadObject = Response<DownLoadRequestResult> & { result: { dash: any } };
 
 /**
  * httpGet返回
@@ -183,10 +185,10 @@ export interface httpGetResponseType {
 }
 
 /**
- * websect.get返回
+ * 请求Url返回
  */
 export interface DownLoadRequestResult {
-  text: string;
+  data: DownloadInfo;
 }
 
 /**

@@ -69,6 +69,6 @@ export const getVideoDownloadLinkByav = async (av: string, level: ArticulationEn
  * @returns B站视频下载地址
  */
 export const getVideoDownLinkByurl = async (url: string, level: ArticulationEnum): Promise<string | string[]> => {
-  const res = await getAvByurl(url);
-  return await getVideoDownloadLinkByav(res, level);
+    const res = await getAvByurl(url);
+    return await getVideoDownloadLinkByav(res, level);
 };
