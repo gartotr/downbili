@@ -21,6 +21,7 @@
   "homepage": "https://github.com/gartotr/downbili#readme",
   "dependencies": {
     "axios": "^1.6.2",
+    "fluent-ffmpeg": "^2.1.2",
     "single-line-log": "^1.1.2"
   },
   "devDependencies": {

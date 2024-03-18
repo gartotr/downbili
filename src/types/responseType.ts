@@ -207,4 +207,8 @@ export interface DownFileMessage {
    * 文件名称
    */
   name: string;
+  /**
+   * 带media文件夹路径
+   */
+  mediaPath: string;
 }

@@ -145,3 +145,33 @@ export interface Option {
    */
   onComplete?: () => void;
 }
+
+/**
+ * 格式转换设置
+ */
+export interface FormatDefaultType {
+  /**
+   * 格式 默认wav
+   */
+  format?: string;
+  /**
+   * 报错后回调
+   */
+  errorCallback?: () => void;
+  /**
+   * 成功回调
+   */
+  successCallback?: () => void;
+  /**
+   * 导出文件名
+   */
+  fileName?: string;
+  /**
+   * 文件路径
+   */
+  filePath?: string;
+  /**
+   * 是否删除原视频 默认true
+   */
+  deleteSourceMedia?: boolean;
+}

@@ -43,6 +43,7 @@ export function progressWithCookie(res: httpGetResponseType, opt: Option & { pro
       fPath,
       cwd: process.cwd(),
       name: opt.name as string,
+      mediaPath: path.join(process.cwd(), folder),
     };
     res.on('end', () => {
       onComplete();
@@ -62,6 +63,7 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
     const folder = opt.folder ?? 'media';
     createfolder(folder);
     const fPath = path.join(process.cwd(), folder, opt.name);
+    console.log('11', path.join(process.cwd(), folder));
 
     if (!opt.type || opt.name === 'default') {
       printType('视频', opt.name, opt.folder);
@@ -83,6 +85,7 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
       fPath,
       cwd: process.cwd(),
       name: opt.name as string,
+      mediaPath: path.join(process.cwd(), folder),
     };
     const defaultCb = () => console.log('\nDownload complete!\n');
     const cb = opt.onComplete || defaultCb;

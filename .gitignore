@@ -4,3 +4,4 @@ lib/
 media/
 .vscode
 dist
+demo.ts
