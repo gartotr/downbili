@@ -70,3 +70,19 @@ const main = async () => {
 main();
 ```
 
+
+### 使用ffmpeg转换成音频
+
+先下载[ffmpeg](https://ffmpeg.org/download.html)
+
+```ts
+import { formatDownFile } from 'downBili';
+
+const url = 'xxx';
+
+const main = async () => {
+  await formatDownFile(url);
+};
+
+main();
+```
