@@ -1,5 +1,5 @@
-import { OutgoingHttpHeader } from 'http';
-import { VideoTypeEnum } from '../constant';
+import {OutgoingHttpHeader} from 'http';
+import {VideoTypeEnum} from '../constant';
 
 export interface OptionsType {
   url: string;
@@ -174,4 +174,9 @@ export interface FormatDefaultType {
    * 是否删除原视频 默认true
    */
   deleteSourceMedia?: boolean;
+  /**
+   * 视频url
+   */
+  url: string
 }
+

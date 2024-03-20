@@ -1,11 +1,17 @@
-import { downBili } from './download';
-import { FormatDefaultType } from './types/types';
+import {downBili} from './download';
+import type {FormatDefaultType} from './types/types';
+import {DEFAULT_CONVERTER} from "./constant"
+
+
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
 const fs = require('fs');
 
-const defaultOption: FormatDefaultType = {
-  format: 'wav',
+/**
+ * 默认配置项
+ */
+const convertSingOption: Omit<FormatDefaultType, "url"> = {
+  format: DEFAULT_CONVERTER,
   deleteSourceMedia: true,
 };
 
@@ -36,28 +42,54 @@ function deleteSourceFile(resourcePath: string) {
 }
 
 /**
- * 下载视频以转音频
- * @param {FormatDefaultType} option FormatDefaultType
- * @param {string} url 视频的url
+ * 下载并转换单个视频为音频
+ * @param {FormatDefaultType} video 视频对象
  */
-export const formatDownFile = async (url: string, option: FormatDefaultType = defaultOption): Promise<void> => {
-  const download = await downBili({ url });
-  const { mediaPath, fPath, name } = download;
-  const formatter = option.format || defaultOption.format;
+export const downloadSingleToAudio = async (video: FormatDefaultType): Promise<void> => {
+  const option = {...convertSingOption, ...video};
+  const download = await downBili({url: option.url});
+  const {mediaPath, fPath, name} = download;
+  const formatter = option.format || DEFAULT_CONVERTER;
   const outputPath = determineOutputPath(option, mediaPath, name, formatter);
 
-  ffmpeg(fPath)
-    .noVideo()
-    .format(formatter)
-    .on('error', (err: any) => {
-      console.error(err);
-      option.errorCallback?.();
-    })
-    .on('end', () => {
-      if (option.deleteSourceMedia) {
-        deleteSourceFile(fPath);
-      }
-      option.successCallback?.();
-    })
-    .save(outputPath);
+  try {
+    await new Promise<void>((resolve, reject) => {
+      ffmpeg(fPath)
+        .noVideo()
+        .format(formatter)
+        .on('error', (err: any) => {
+          console.error(err);
+          option.errorCallback?.();
+          reject(err);
+        })
+        .on('end', () => {
+          if (option.deleteSourceMedia) {
+            deleteSourceFile(fPath);
+          }
+          option.successCallback?.();
+          resolve();
+        })
+        .save(outputPath);
+    });
+  } catch (err) {
+    console.error(`Error converting video at ${option.url}:`, err);
+  }
+}
+
+/**
+ * 转换多个视频（顺序执行）
+ * @param {FormatDefaultType[]} batchVideo 多个视频对象组成的数组
+ */
+export const videoToAudioConverter = async (batchVideo: FormatDefaultType[]): Promise<void> => {
+  for (const video of batchVideo) {
+    await downloadSingleToAudio(video);
+  }
+};
+
+/**
+ * 转换多个视频（并发执行）
+ * @param {FormatDefaultType[]} batchVideo 多个视频对象组成的数组
+ */
+export const videoToAudioConverterParallel = async (batchVideo: FormatDefaultType[]): Promise<void> => {
+  await Promise.all(batchVideo.map(downloadSingleToAudio));
 };

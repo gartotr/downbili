@@ -24,6 +24,11 @@ export const WEB_INTERFACE_API = `${PREFIX}/x/web-interface/view`;
 export const PAGE_LIST_API = `${PREFIX}/x/player/pagelist`;
 
 /**
+ * 默认转换格式
+ */
+export const DEFAULT_CONVERTER = "wav"
+
+/**
  * 视频清晰度
  */
 export enum ArticulationEnum {
