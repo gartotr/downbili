@@ -1,7 +1,6 @@
-import {downBili} from './download';
-import type {FormatDefaultType} from './types/types';
-import {DEFAULT_CONVERTER} from "./constant"
-
+import { downBili } from './download';
+import type { FormatDefaultType, OmitUrlOption } from './types/types';
+import { DEFAULT_CONVERTER } from './constant';
 
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
@@ -10,7 +9,7 @@ const fs = require('fs');
 /**
  * 默认配置项
  */
-const convertSingOption: Omit<FormatDefaultType, "url"> = {
+const convertSingOption: Omit<FormatDefaultType, 'url'> = {
   format: DEFAULT_CONVERTER,
   deleteSourceMedia: true,
 };
@@ -44,11 +43,13 @@ function deleteSourceFile(resourcePath: string) {
 /**
  * 下载并转换单个视频为音频
  * @param {FormatDefaultType} video 视频对象
+ * @param {Option} downloadOption 下载视频配置
  */
-export const downloadSingleToAudio = async (video: FormatDefaultType): Promise<void> => {
-  const option = {...convertSingOption, ...video};
-  const download = await downBili({url: option.url});
-  const {mediaPath, fPath, name} = download;
+export const downloadSingleToAudio = async (video: FormatDefaultType, downloadOption?: OmitUrlOption): Promise<void> => {
+  const option = { ...convertSingOption, ...video };
+  const preload = { ...downloadOption, url: option.url };
+  const download = await downBili(preload);
+  const { mediaPath, fPath, name } = download;
   const formatter = option.format || DEFAULT_CONVERTER;
   const outputPath = determineOutputPath(option, mediaPath, name, formatter);
 
@@ -74,15 +75,15 @@ export const downloadSingleToAudio = async (video: FormatDefaultType): Promise<v
   } catch (err) {
     console.error(`Error converting video at ${option.url}:`, err);
   }
-}
+};
 
 /**
  * 转换多个视频（顺序执行）
  * @param {FormatDefaultType[]} batchVideo 多个视频对象组成的数组
  */
-export const videoToAudioConverter = async (batchVideo: FormatDefaultType[]): Promise<void> => {
+export const videoToAudioConverter = async (batchVideo: FormatDefaultType[], downloadOption?: OmitUrlOption): Promise<void> => {
   for (const video of batchVideo) {
-    await downloadSingleToAudio(video);
+    await downloadSingleToAudio(video, downloadOption);
   }
 };
 
@@ -90,6 +91,6 @@ export const videoToAudioConverter = async (batchVideo: FormatDefaultType[]): Pr
  * 转换多个视频（并发执行）
  * @param {FormatDefaultType[]} batchVideo 多个视频对象组成的数组
  */
-export const videoToAudioConverterParallel = async (batchVideo: FormatDefaultType[]): Promise<void> => {
-  await Promise.all(batchVideo.map(downloadSingleToAudio));
+export const videoToAudioConverterParallel = async (batchVideo: FormatDefaultType[], downloadOption?: OmitUrlOption): Promise<void> => {
+  await Promise.all(batchVideo.map(video => downloadSingleToAudio(video, downloadOption)));
 };

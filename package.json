@@ -1,12 +1,13 @@
 {
   "name": "downbili",
-  "version": "0.2.5",
+  "version": "0.2.7",
   "description": "fock ibili 下载视频",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "ts-node ./demo.ts"
   },
   "repository": {
     "type": "git",

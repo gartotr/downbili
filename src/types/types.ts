@@ -1,5 +1,5 @@
-import {OutgoingHttpHeader} from 'http';
-import {VideoTypeEnum} from '../constant';
+import { OutgoingHttpHeader } from 'http';
+import { VideoTypeEnum } from '../constant';
 
 export interface OptionsType {
   url: string;
@@ -146,6 +146,8 @@ export interface Option {
   onComplete?: () => void;
 }
 
+export type OmitUrlOption = Omit<Option, 'url'>;
+
 /**
  * 格式转换设置
  */
@@ -177,6 +179,5 @@ export interface FormatDefaultType {
   /**
    * 视频url
    */
-  url: string
+  url: string;
 }
-
