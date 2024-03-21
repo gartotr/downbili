@@ -79,3 +79,13 @@ export function printType(type: string, name?: string, folder?: string) {
   const dir = path.join(process.cwd(), dirName);
   console.log(`正在下载类型：${type} 名称：${name ?? ''}，位于${dir}`);
 }
+
+/**
+ * 获取QueryString
+ * @param {string} url url地址
+ * @param {string} getValue 要获取的参数
+ */
+export function getQueryString( url: string, getValue: string) {
+  const newUrl = new URL(url);
+  return new URLSearchParams(newUrl.search).get(getValue)
+}

@@ -1,6 +1,6 @@
 {
   "name": "downbili",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "fock ibili 下载视频",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

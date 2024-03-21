@@ -3,6 +3,7 @@ import * as deal from "./deal";
 import type { Option, OrString, RequestHeaderType } from "../types/types";
 import { DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from "../types/responseType";
 import { VideoTypeEnum } from "../constant";
+import { getQueryString } from "./index";
 
 const path = require("path");
 
@@ -17,7 +18,8 @@ const path = require("path");
 export async function dealLink(opt: Option, options: RequestHeaderType, addr: OrString, videoUrl: OrString): Promise<DownFileMessage> {
   return new Promise(async resolve => {
     if (Array.isArray(addr)) {
-      addr = addr[0];
+      const qs = getQueryString(opt.url,"p");
+      addr = qs ? qs : addr[0]
     }
 
     const res: DownloadObject = await axios.get(addr, { headers: options });
