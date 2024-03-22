@@ -1,6 +1,6 @@
 import { getAvByurl, getVideoMessageByav } from "./getVarious";
 import { ArticulationEnum, PLAYURL_API } from "../constant";
-import type { IWebInfo } from "../types/responseType";
+import type { IWebInfo } from "../types";
 
 /**
  * 再次对视频的信息进行一次封装

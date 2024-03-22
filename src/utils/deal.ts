@@ -1,7 +1,6 @@
 import { httpGet } from './httpio';
 import * as assist from './assist';
-import type { Option } from '../types/types';
-import type { DownFileMessage, httpGetResponseType } from '../types/responseType';
+import type { Option, DownFileMessage, httpGetResponseType } from '../types';
 import { UserAgent } from '../constant'
 
 interface Headers {
@@ -19,7 +18,7 @@ export async function downloadOne(options: Option, url: string, referer: string 
     Referer: referer,
     'User-Agent': UserAgent,
   };
-  const response: httpGetResponseType = await httpGet({ url, headers });
+  const response: httpGetResponseType = await httpGet({url, headers});
 
   if (response.headers['content-type'] === 'video/x-flv') {
     return assist.progressWithCookie(response, options);

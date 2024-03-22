@@ -1,11 +1,19 @@
 import axios from "axios";
+import path from "path";
+
 import * as deal from "./deal";
-import type { Option, OrString, RequestHeaderType } from "../types/types";
-import { DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from "../types/responseType";
+import type {
+  Option,
+  OrString,
+  RequestHeaderType,
+  DownloadObject,
+  Durl,
+  DownLoadRequestResult,
+  DownFileMessage
+} from "../types";
 import { VideoTypeEnum } from "../constant";
 import { getQueryString } from "./index";
 
-const path = require("path");
 
 /**
  * 输入链接下载视频
@@ -18,11 +26,11 @@ const path = require("path");
 export async function dealLink(opt: Option, options: RequestHeaderType, addr: OrString, videoUrl: OrString): Promise<DownFileMessage> {
   return new Promise(async resolve => {
     if (Array.isArray(addr)) {
-      const qs = getQueryString(opt.url,"p");
+      const qs = getQueryString(opt.url, "p");
       addr = qs ? qs : addr[0]
     }
 
-    const res: DownloadObject = await axios.get(addr, { headers: options });
+    const res: DownloadObject = await axios.get(addr, {headers: options});
 
     if (res.code === -404 && res.message !== "success") {
       if (opt.type && opt.type !== VideoTypeEnum.default) {

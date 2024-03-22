@@ -1,5 +1,6 @@
-const path = require('path');
-const fs = require('fs');
+import fs from "fs";
+import path from "path";
+
 /**
  * 判断是不是 Object
  * @param {unknown} o

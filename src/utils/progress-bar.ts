@@ -1,4 +1,4 @@
-const slog = require('single-line-log');
+import slog from "single-line-log";
 
 interface ProgressBarOptions {
   completed: number;

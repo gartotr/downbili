@@ -1,12 +1,11 @@
+import fs from "fs";
+import path from "path";
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
-import type { Option, ProgressOptions } from '../types/types';
-import type { httpGetResponseType, DownFileMessage } from '../types/responseType';
+import type { Option, ProgressOptions,httpGetResponseType, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
 import { printType } from '.';
 
-const fs = require('fs');
-const path = require('path');
 
 export function progressWithCookie(res: httpGetResponseType, opt: Option & { progress?: ProgressOptions }): Promise<DownFileMessage> {
   return new Promise((resolve, _reject) => {
@@ -21,7 +20,7 @@ export function progressWithCookie(res: httpGetResponseType, opt: Option & { pro
     const total = headers['content-length'];
     const dir = path.join(process.cwd(), folder);
     createfolder(folder);
-    const fPath = path.join(dir, name);
+    const fPath = path.join(dir, name || '');
 
     if (!opt.type || name === VideoTypeEnum.default) {
       printType('视频', name, folder);
@@ -62,7 +61,7 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
     const total = headers['content-length'];
     const folder = opt.folder ?? 'media';
     createfolder(folder);
-    const fPath = path.join(process.cwd(), folder, opt.name);
+    const fPath = path.join(process.cwd(), folder, opt.name || '');
     console.log('11', path.join(process.cwd(), folder));
 
     if (!opt.type || opt.name === 'default') {

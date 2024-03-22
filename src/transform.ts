@@ -1,10 +1,11 @@
+import ffmpeg from "fluent-ffmpeg";
+import path from "path";
+import * as fs from "fs";
+
 import { downBili } from './download';
-import type { FormatDefaultType, OmitUrlOption } from './types/types';
+import type { FormatDefaultType, OmitUrlOption } from './types';
 import { DEFAULT_CONVERTER } from './constant';
 
-const ffmpeg = require('fluent-ffmpeg');
-const path = require('path');
-const fs = require('fs');
 
 /**
  * 默认配置项
@@ -24,7 +25,7 @@ const convertSingOption: Omit<FormatDefaultType, 'url'> = {
  */
 function determineOutputPath(option: FormatDefaultType, mediaPath: string, originalName: string, format?: string): string {
   const fileName = option.fileName ?? path.basename(originalName, path.extname(originalName));
-  const filePath = option.filePath ? path.join(option.filePath, `${fileName}.${format}`) : path.join(mediaPath, `${fileName}.${format}`);
+  const filePath = option.filePath ? path.join(option.filePath, `${ fileName }.${ format }`) : path.join(mediaPath, `${ fileName }.${ format }`);
   return filePath;
 }
 
@@ -46,10 +47,10 @@ function deleteSourceFile(resourcePath: string) {
  * @param {Option} downloadOption 下载视频配置
  */
 export const downloadSingleToAudio = async (video: FormatDefaultType, downloadOption?: OmitUrlOption): Promise<void> => {
-  const option = { ...convertSingOption, ...video };
-  const preload = { ...downloadOption, url: option.url };
+  const option = {...convertSingOption, ...video};
+  const preload = {...downloadOption, url: option.url};
   const download = await downBili(preload);
-  const { mediaPath, fPath, name } = download;
+  const {mediaPath, fPath, name} = download;
   const formatter = option.format || DEFAULT_CONVERTER;
   const outputPath = determineOutputPath(option, mediaPath, name, formatter);
 
@@ -58,6 +59,15 @@ export const downloadSingleToAudio = async (video: FormatDefaultType, downloadOp
       ffmpeg(fPath)
         .noVideo()
         .format(formatter)
+        .on('start', () => {
+          if (option.filePath && !fs.existsSync(option.filePath)) {
+            fs.mkdir(option.filePath, {}, (err: NodeJS.ErrnoException | null) => {
+              if (err) {
+                throw err;
+              }
+            });
+          }
+        })
         .on('error', (err: any) => {
           console.error(err);
           option.errorCallback?.();
@@ -73,13 +83,14 @@ export const downloadSingleToAudio = async (video: FormatDefaultType, downloadOp
         .save(outputPath);
     });
   } catch (err) {
-    console.error(`Error converting video at ${option.url}:`, err);
+    console.error(`Error converting video at ${ option.url }:`, err);
   }
 };
 
 /**
  * 转换多个视频（顺序执行）
  * @param {FormatDefaultType[]} batchVideo 多个视频对象组成的数组
+ * @param {OmitUrlOption} downloadOption 下载配置，不需要视频URL
  */
 export const videoToAudioConverter = async (batchVideo: FormatDefaultType[], downloadOption?: OmitUrlOption): Promise<void> => {
   for (const video of batchVideo) {
@@ -90,6 +101,7 @@ export const videoToAudioConverter = async (batchVideo: FormatDefaultType[], dow
 /**
  * 转换多个视频（并发执行）
  * @param {FormatDefaultType[]} batchVideo 多个视频对象组成的数组
+ * @param {OmitUrlOption} downloadOption 下载配置，不需要视频URL
  */
 export const videoToAudioConverterParallel = async (batchVideo: FormatDefaultType[], downloadOption?: OmitUrlOption): Promise<void> => {
   await Promise.all(batchVideo.map(video => downloadSingleToAudio(video, downloadOption)));

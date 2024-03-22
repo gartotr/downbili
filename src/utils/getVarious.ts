@@ -1,9 +1,8 @@
+import axios from 'axios';
 import { parse } from 'url';
-
 import { isAvurl } from '.';
 import { PAGE_LIST_API, WEB_INTERFACE_API } from '../constant';
-import type { PlayerTextObject, WebData, WebTextObjectData, WebTextObject } from '../types/responseType';
-import axios from 'axios';
+import type { PlayerTextObject, WebData, WebTextObjectData, WebTextObject } from '../types';
 
 /**
  * 根据视频播放地址获取 视频的av号

@@ -1,13 +1,12 @@
 import { getVideoDownLinkByurl, dealLink, ArticulationEnum, UserAgent } from './exports';
-import { DownFileMessage } from './types/responseType';
-import type { Option, RequestHeaderType } from './types/types';
+import type { Option, RequestHeaderType, DownFileMessage } from './types';
 
 /**
  * 下载哔哩哔哩的视频
  * @param {Option} opt
  */
 export const downBili = async (opt: Option): Promise<DownFileMessage> => {
-  let { url, sessdata, level = ArticulationEnum._16 } = opt;
+  let {url, sessdata, level = ArticulationEnum._16} = opt;
   if (!url) {
     // 如果不存在就直接报错
     throw new Error('必须传入url!!');
@@ -15,7 +14,7 @@ export const downBili = async (opt: Option): Promise<DownFileMessage> => {
 
   const requestHeader: RequestHeaderType = {
     Referer: url,
-    Cookie: sessdata ? `SESSDATA=${sessdata}` : '',
+    Cookie: sessdata ? `SESSDATA=${ sessdata }` : '',
     'User-Agent': UserAgent,
   };
 
