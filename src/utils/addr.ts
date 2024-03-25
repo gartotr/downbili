@@ -27,7 +27,7 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
   return new Promise(async resolve => {
     if (Array.isArray(addr)) {
       const qs = getQueryString(opt.url, "p");
-      addr = qs ? qs : addr[0]
+      addr = qs ? addr[qs] as string : addr[0]
     }
 
     const res: DownloadObject = await axios.get(addr, {headers: options});
