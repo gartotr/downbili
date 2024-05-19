@@ -62,7 +62,6 @@ export function progressWithoutCookie(res: Record<string, any>, opt: Option): Pr
     const folder = opt.folder ?? 'media';
     createfolder(folder);
     const fPath = path.join(process.cwd(), folder, opt.name || '');
-    console.log('11', path.join(process.cwd(), folder));
 
     if (!opt.type || opt.name === 'default') {
       printType('视频', opt.name, opt.folder);
