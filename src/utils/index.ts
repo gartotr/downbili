@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 /**
  * 判断是不是 Object
@@ -75,6 +75,12 @@ export function isMdurl(url: string): boolean {
   return /md\d+/g.test(url);
 }
 
+/**
+ * 打印日志到控制台
+ * @param {string | null} type 文件类型
+ * @param {string | null} name 文件名称
+ * @param {string | null} folder 文件夹名称
+ */
 export function printType(type: string, name?: string, folder?: string) {
   const dirName = folder ?? 'media';
   const dir = path.join(process.cwd(), dirName);
@@ -85,8 +91,9 @@ export function printType(type: string, name?: string, folder?: string) {
  * 获取QueryString
  * @param {string} url url地址
  * @param {string} getValue 要获取的参数
+ * @returns string | null
  */
-export function getQueryString( url: string, getValue: string) {
+export function getQueryString(url: string, getValue: string) {
   const newUrl = new URL(url);
-  return new URLSearchParams(newUrl.search).get(getValue)
+  return new URLSearchParams(newUrl.search).get(getValue);
 }

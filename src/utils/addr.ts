@@ -1,19 +1,23 @@
-import axios from "axios";
-import path from "path";
+import axios from 'axios';
+import path from 'path';
 
-import * as deal from "./deal";
-import type {
-  Option,
-  OrString,
-  RequestHeaderType,
-  DownloadObject,
-  Durl,
-  DownLoadRequestResult,
-  DownFileMessage
-} from "../types";
-import { VideoTypeEnum } from "../constant";
-import { getQueryString } from "./index";
+import * as deal from './deal';
+import type { Option, OrString, RequestHeaderType, DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from '../types';
+import { VideoTypeEnum } from '../constant';
+import { getQueryString } from './index';
 
+export function withSelectedAddress(url: string, addr: OrString) {
+  if (Array.isArray(addr)) {
+    const indexParam = getQueryString(url, 'p');
+    if (indexParam !== null) {
+      const index = parseInt(indexParam, 10);
+      addr = addr[index - 1];
+    } else {
+      addr = addr[0];
+    }
+  }
+  return addr;
+}
 
 /**
  * 输入链接下载视频
@@ -25,18 +29,15 @@ import { getQueryString } from "./index";
  */
 export async function dealLink(opt: Option, options: RequestHeaderType, addr: OrString, videoUrl: OrString): Promise<DownFileMessage> {
   return new Promise(async resolve => {
-    if (Array.isArray(addr)) {
-      const qs = getQueryString(opt.url, "p");
-      addr = qs ? addr[qs] as string : addr[0]
-    }
+    const finalAddr = withSelectedAddress(opt.url, addr);
 
-    const res: DownloadObject = await axios.get(addr, {headers: options});
+    const res: DownloadObject = await axios.get(finalAddr, { headers: options });
 
-    if (res.code === -404 && res.message !== "success") {
+    if (res.code === -404 && res.message !== 'success') {
       if (opt.type && opt.type !== VideoTypeEnum.default) {
         throw new Error(`请对应url视频类型`);
       } else {
-        throw new Error("请传入sessdata!！");
+        throw new Error('请传入sessdata!！');
       }
     }
 
@@ -54,12 +55,12 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
         opt.defaultName = match[1].trim();
         const fileName = opt.fileName;
         let ext: string = path.parse(opt.defaultName).ext;
-        if (ext === ".m4s" && opt.type === VideoTypeEnum.silent) {
-          ext = ".mp4";
+        if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
+          ext = '.mp4';
           opt.defaultName = path.parse(opt.defaultName).name + ext;
         }
-        if (ext === ".m4s" && opt.type === VideoTypeEnum.audio) {
-          ext = ".mp3";
+        if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
+          ext = '.mp3';
           opt.defaultName = path.parse(opt.defaultName).name + ext;
         }
         opt.name = (fileName && fileName + ext) || opt.defaultName;
@@ -73,13 +74,13 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
       // 解析文件后缀名称
       let ext = path.parse(opt.defaultName).ext;
 
-      if (ext === ".m4s" && opt.type === VideoTypeEnum.silent) {
-        ext = ".mp4";
+      if (ext === '.m4s' && opt.type === VideoTypeEnum.silent) {
+        ext = '.mp4';
         opt.defaultName = path.parse(opt.defaultName).name + ext;
       }
 
-      if (ext === ".m4s" && opt.type === VideoTypeEnum.audio) {
-        ext = ".mp3";
+      if (ext === '.m4s' && opt.type === VideoTypeEnum.audio) {
+        ext = '.mp3';
         opt.defaultName = path.parse(opt.defaultName).name + ext;
       }
 
