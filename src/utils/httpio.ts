@@ -3,7 +3,12 @@ import { get as _get } from 'https'
 import { parse } from 'url'
 import type { OptionsType, httpGetResponseType } from '../types';
 
-// 解决重定向的问题
+/**
+ * 解决重定向的问题
+ * @param {IncomingMessage} res
+ * @param {OptionsType} opt
+ * @returns
+ */
 export const _redirect = (res: IncomingMessage, opt: OptionsType): Promise<httpGetResponseType | IncomingMessage> => {
   let reurl = res.headers.location;
   if (reurl) {

@@ -1,17 +1,29 @@
 import { OutgoingHttpHeader } from 'http';
 import { VideoTypeEnum } from '../constant';
 
+/**
+ * 请求配置
+ */
 export interface OptionsType {
   url: string;
   headers: NodeJS.Dict<OutgoingHttpHeader>;
 }
 
+/**
+ * 请求头参数
+ */
 export interface RequestHeaderType {
   [key: string]: string;
 }
 
+/**
+ * 字符串类型
+ */
 export type OrString = string | string[];
 
+/**
+ * 视频评论
+ */
 export interface IVideoComments {
   member: {
     mid: string;
@@ -27,6 +39,9 @@ export interface IVideoComments {
   replies: IVideoComments[];
 }
 
+/**
+ * 视频评论格式化
+ */
 export interface ICommentsFormat {
   mid: string;
   uname: string;
@@ -38,8 +53,14 @@ export interface ICommentsFormat {
   replies: any;
 }
 
+/**
+ * 视频评论格式化剔除replies
+ */
 export type ICommentsFormatOmit = Omit<ICommentsFormat, 'replies'>;
 
+/**
+ * 下载视频配置
+ */
 export interface IDownloadOption {
   name: string;
   type?: keyof typeof VideoTypeEnum;
@@ -47,18 +68,17 @@ export interface IDownloadOption {
   onComplete?: () => void;
 }
 
+/**
+ * 进度条配置
+ */
 export interface ProgressOptions {
   labelname?: string;
   length?: number;
 }
 
-export interface DanmuResponse {
-  order: number;
-  date: string;
-  time: number;
-  text: string;
-}
-
+/**
+ * 视频信息
+ */
 export interface VideoInfo {
   aid: number;
   tid: number;
@@ -80,6 +100,9 @@ export interface VideoInfo {
   redirect_url: string;
 }
 
+/**
+ * 视频信息消息
+ */
 export interface VideoMessage {
   aid: number;
   tid: number;
