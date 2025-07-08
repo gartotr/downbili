@@ -26,7 +26,7 @@ export const PAGE_LIST_API = `${PREFIX}/x/player/pagelist`;
 /**
  * 默认转换格式
  */
-export const DEFAULT_CONVERTER = "wav"
+export const DEFAULT_CONVERTER = 'mp3';
 
 /**
  * 视频清晰度
@@ -70,4 +70,54 @@ export enum VideoTypeEnum {
    * 默认
    */
   default = 'default',
+}
+
+/**
+ * 常用音频
+ */
+export enum AudioFormatEnum {
+  /**
+   * MP3 格式
+   */
+  MP3 = 'mp3',
+
+  /**
+   * AAC 格式（高级音频编码）
+   */
+  AAC = 'aac',
+
+  /**
+   * WAV 格式（波形音频文件格式）
+   */
+  WAV = 'wav',
+
+  /**
+   * FLAC 格式（无损音频压缩）
+   */
+  FLAC = 'flac',
+
+  /**
+   * ALAC 格式（苹果无损音频编码）
+   */
+  ALAC = 'alac',
+
+  /**
+   * OGG 格式（Ogg Vorbis）
+   */
+  OGG = 'ogg',
+
+  /**
+   * APE 格式（Monkey's Audio）
+   */
+  APE = 'ape',
+
+  /**
+   * WMA 格式（Windows Media Audio）
+   */
+  WMA = 'wma',
+
+  /**
+   * M4A 格式（通常用于 AAC 编码的音频）
+   */
+  M4A = 'm4a',
 }

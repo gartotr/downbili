@@ -1,16 +1,20 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
-import type { Option, ProgressOptions,httpGetResponseType, DownFileMessage } from '../types';
+import type { Option, ProgressOptions, httpGetResponseType, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
 import { printType } from '.';
+import { PassThrough } from 'stream';
+import ffmpeg from 'fluent-ffmpeg';
 
-
-export function progressWithCookie(res: httpGetResponseType, opt: Option & { progress?: ProgressOptions }): Promise<DownFileMessage> {
-  return new Promise((resolve, _reject) => {
+function handleProgress(
+  res: httpGetResponseType | Record<string, any>,
+  opt: Option & { progress?: ProgressOptions },
+  transform: boolean
+): Promise<DownFileMessage> {
+  return new Promise((resolve, reject) => {
     const defaultCb = () => console.log('\n 下载成功！ \n');
-
     const { progress, folder = 'media', name, onComplete = defaultCb } = opt;
     const labelName = progress?.labelname ?? '正在下载：';
     const progressLength = progress?.length ?? 50;
@@ -20,7 +24,14 @@ export function progressWithCookie(res: httpGetResponseType, opt: Option & { pro
     const total = headers['content-length'];
     const dir = path.join(process.cwd(), folder);
     createfolder(folder);
-    const fPath = path.join(dir, name || '');
+
+    let fPath = '';
+    if (transform) {
+      opt.name = opt.name?.split('.')[0];
+      fPath = path.join(dir, `${opt.name}.${opt.format || 'mp3'}`);
+    } else {
+      fPath = path.join(dir, name || '');
+    }
 
     if (!opt.type || name === VideoTypeEnum.default) {
       printType('视频', name, folder);
@@ -32,67 +43,69 @@ export function progressWithCookie(res: httpGetResponseType, opt: Option & { pro
       printType('音频', name, folder);
     }
 
-    res.pipe(fs.createWriteStream(fPath));
     let completed = 0;
-    res.on('data', (chunk: Record<string, string>[]) => {
+    let passThroughStream: PassThrough | null = null;
+
+    res.on('data', (chunk: Buffer) => {
       completed += chunk.length;
       pb.render({ completed, total });
+
+      if (transform && !passThroughStream) {
+        passThroughStream = new PassThrough();
+        ffmpeg(passThroughStream)
+          .noVideo()
+          .format(opt.format || 'mp3')
+          .on('end', () => {
+            resolve({
+              fPath,
+              cwd: process.cwd(),
+              name: opt.name as string,
+              mediaPath: path.join(process.cwd(), folder),
+            });
+          })
+          .on('error', err => {
+            reject(err);
+          })
+          .save(fPath);
+      }
+
+      if (transform) {
+        passThroughStream?.write(chunk);
+      }
     });
-    const response: DownFileMessage = {
-      fPath,
-      cwd: process.cwd(),
-      name: opt.name as string,
-      mediaPath: path.join(process.cwd(), folder),
-    };
+
     res.on('end', () => {
-      onComplete();
-      resolve(response);
+      if (transform) {
+        passThroughStream?.end();
+      } else {
+        onComplete();
+        resolve({
+          fPath,
+          cwd: process.cwd(),
+          name: opt.name as string,
+          mediaPath: path.join(process.cwd(), folder),
+        });
+      }
     });
-    res.on('error', (err: Record<string, string>) => {
-      throw err;
+
+    res.on('error', (err: Error) => {
+      reject(err);
     });
+
+    if (!transform) {
+      res.pipe(fs.createWriteStream(fPath));
+    }
   });
 }
 
-export function progressWithoutCookie(res: Record<string, any>, opt: Option): Promise<DownFileMessage> {
-  return new Promise((resolve, _reject) => {
-    const pb = new ProgressBar('Download progress', 50);
-    const headers = res.headers;
-    const total = headers['content-length'];
-    const folder = opt.folder ?? 'media';
-    createfolder(folder);
-    const fPath = path.join(process.cwd(), folder, opt.name || '');
+export function progressWithCookie(
+  res: httpGetResponseType,
+  opt: Option & { progress?: ProgressOptions },
+  transform: boolean
+): Promise<DownFileMessage> {
+  return handleProgress(res, opt, transform);
+}
 
-    if (!opt.type || opt.name === 'default') {
-      printType('视频', opt.name, opt.folder);
-    }
-    if (opt.type === VideoTypeEnum.silent) {
-      printType('无声视频, opt.name, opt.folder');
-    }
-    if (opt.type === VideoTypeEnum.audio) {
-      printType('音频', opt.name, opt.folder);
-    }
-
-    res.pipe(fs.createWriteStream(fPath));
-    let completed = 0;
-    res.on('data', (chunk: Record<string, string>[]) => {
-      completed += chunk.length;
-      pb.render({ completed, total });
-    });
-    const response: DownFileMessage = {
-      fPath,
-      cwd: process.cwd(),
-      name: opt.name as string,
-      mediaPath: path.join(process.cwd(), folder),
-    };
-    const defaultCb = () => console.log('\nDownload complete!\n');
-    const cb = opt.onComplete || defaultCb;
-    res.on('end', () => {
-      cb();
-      resolve(response);
-    });
-    res.on('error', (err: Record<string, string>) => {
-      throw err;
-    });
-  });
+export function progressWithoutCookie(res: Record<string, any>, opt: Option, transform: boolean): Promise<DownFileMessage> {
+  return handleProgress(res, opt, transform);
 }

@@ -1,5 +1,5 @@
 import { OutgoingHttpHeader } from 'http';
-import { VideoTypeEnum } from '../constant';
+import { VideoTypeEnum, AudioFormatEnum } from '../constant';
 
 /**
  * 请求配置
@@ -167,6 +167,10 @@ export interface Option {
    * 执行成功的回调
    */
   onComplete?: () => void;
+  /**
+   * 转音频必传
+   */
+  format?: AudioFormatEnum;
 }
 
 export type OmitUrlOption = Omit<Option, 'url'>;

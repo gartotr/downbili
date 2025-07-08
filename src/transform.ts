@@ -43,6 +43,7 @@ function deleteSourceFile(resourcePath: string) {
 
 /**
  * 下载并转换单个视频为音频
+ * @deprecated 请使用 options 参数传入format
  * @param {FormatDefaultType} video 视频对象
  * @param {Option} downloadOption 下载视频配置
  */

@@ -2,6 +2,7 @@ import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import dts from 'rollup-plugin-dts';
+import { terser } from 'rollup-plugin-terser';
 
 const commonConfig = {
   input: 'src/index.ts', // 修改为你的源码入口路径
@@ -19,6 +20,11 @@ const commonConfig = {
         },
       },
     }),
+    terser({
+      format: {
+        comments: false
+      }
+    })
   ],
 };
 

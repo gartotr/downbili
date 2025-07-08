@@ -1,7 +1,7 @@
 import { httpGet } from './httpio';
 import * as assist from './assist';
 import type { Option, DownFileMessage, httpGetResponseType } from '../types';
-import { UserAgent } from '../constant'
+import { UserAgent, AudioFormatEnum } from '../constant';
 
 interface Headers {
   [key: string]: string | string[];
@@ -18,11 +18,11 @@ export async function downloadOne(options: Option, url: string, referer: string 
     Referer: referer,
     'User-Agent': UserAgent,
   };
-  const response: httpGetResponseType = await httpGet({url, headers});
 
-  if (response.headers['content-type'] === 'video/x-flv') {
-    return assist.progressWithCookie(response, options);
-  } else {
-    return assist.progressWithoutCookie(response, options);
+  const transform = Object.values(AudioFormatEnum).includes(options.format as AudioFormatEnum);
+  if (transform) {
+    headers.responseType = 'stream';
   }
+  const response: httpGetResponseType = await httpGet({ url, headers });
+  return assist.progressWithoutCookie(response, options, transform);
 }
