@@ -1,6 +1,6 @@
 {
   "name": "downbili",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "fock ibili 下载视频",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/gartotr/downbili#readme",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "axios": "^1.6.2",
     "fluent-ffmpeg": "^2.1.2",
     "single-line-log": "^1.1.2"

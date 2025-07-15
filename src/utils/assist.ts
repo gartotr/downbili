@@ -1,13 +1,24 @@
 import fs from 'fs';
 import path from 'path';
+import { PassThrough } from 'stream';
+import ffmpeg from 'fluent-ffmpeg';
+import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
 import type { Option, ProgressOptions, httpGetResponseType, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
 import { printType } from '.';
-import { PassThrough } from 'stream';
-import ffmpeg from 'fluent-ffmpeg';
 
+
+ffmpeg.setFfmpegPath(ffmpegPath);
+
+/**
+ * 处理下载进度，支持将下载内容进行格式转换
+ * @param res - HTTP响应对象或普通对象
+ * @param opt - 下载选项，包含进度配置
+ * @param transform - 是否需要进行格式转换
+ * @returns 返回一个Promise，解析为包含文件路径等信息的对象，拒绝则返回错误
+ */
 function handleProgress(
   res: httpGetResponseType | Record<string, any>,
   opt: Option & { progress?: ProgressOptions },
