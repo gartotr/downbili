@@ -6,3 +6,6 @@ export * from './utils/assist';
 export * from './utils/httpio';
 export * from './utils/getVarious';
 export * from './constant';
+export * from './download';
+export * from './transform'
+export * from './types'

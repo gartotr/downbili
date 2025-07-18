@@ -2,15 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { PassThrough } from 'stream';
 import ffmpeg from 'fluent-ffmpeg';
-import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
 import ProgressBar from './progress-bar';
 import { createfolder } from '.';
 import type { Option, ProgressOptions, httpGetResponseType, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
 import { printType } from '.';
-
-
-ffmpeg.setFfmpegPath(ffmpegPath);
 
 /**
  * 处理下载进度，支持将下载内容进行格式转换

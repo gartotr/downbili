@@ -1,4 +1,5 @@
-export * from './download';
+import ffmpeg from 'fluent-ffmpeg';
+import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
+ffmpeg.setFfmpegPath(ffmpegPath);
+
 export * from './exports';
-export * from './transform'
-export * from './types'
