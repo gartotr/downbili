@@ -6,8 +6,7 @@ import ProgressBar from './progress-bar';
 import { createfolder } from '.';
 import type { Option, ProgressOptions, httpGetResponseType, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
-import { printType } from '.';
-
+import { printType, setFfmpegPath } from '.';
 /**
  * 处理下载进度，支持将下载内容进行格式转换
  * @param res - HTTP响应对象或普通对象
@@ -53,7 +52,7 @@ function handleProgress(
 
     let completed = 0;
     let passThroughStream: PassThrough | null = null;
-
+    setFfmpegPath();
     res.on('data', (chunk: Buffer) => {
       completed += chunk.length;
       pb.render({ completed, total });

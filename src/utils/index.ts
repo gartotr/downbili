@@ -1,5 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import ffmpeg from 'fluent-ffmpeg';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url || __filename);
+const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 
 /**
  * 判断是不是 Object
@@ -105,4 +110,16 @@ export function printType(type: string, name?: string, folder?: string) {
 export function getQueryString(url: string, getValue: string) {
   const newUrl = new URL(url);
   return new URLSearchParams(newUrl.search).get(getValue);
+}
+
+/**
+ * ffmpeg路径
+ */
+export const ffmpegPath = ffmpegInstaller.path;
+
+/**
+ * 设置ffmpeg路径
+ */
+export function setFfmpegPath() {
+  ffmpeg.setFfmpegPath(ffmpegPath);
 }
