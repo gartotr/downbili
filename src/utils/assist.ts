@@ -33,8 +33,9 @@ function handleProgress(
     const pb = new ProgressBar(labelName, progressLength);
     const headers = res.headers;
     const total = headers['content-length'];
-    const dir = path.join(process.cwd(), folder);
-    createfolder(folder);
+    const outputDir = opt.output || folder;
+    const dir = path.isAbsolute(outputDir) ? outputDir : path.join(process.cwd(), outputDir);
+    createfolder(dir);
 
     let fPath = '';
     if (transform) {
@@ -45,13 +46,13 @@ function handleProgress(
     }
 
     if (!opt.type || name === VideoTypeEnum.default) {
-      printType('视频', name, folder);
+      printType('视频', name, dir);
     }
     if (opt.type === VideoTypeEnum.silent) {
-      printType('无声视频', name, folder);
+      printType('无声视频', name, dir);
     }
     if (opt.type === VideoTypeEnum.audio) {
-      printType('音频', name, folder);
+      printType('音频', name, dir);
     }
 
     let completed = 0;
@@ -71,7 +72,7 @@ function handleProgress(
               fPath,
               cwd: process.cwd(),
               name: opt.name as string,
-              mediaPath: path.join(process.cwd(), folder),
+              mediaPath: dir,
             });
           })
           .on('error', err => {
@@ -94,7 +95,7 @@ function handleProgress(
           fPath,
           cwd: process.cwd(),
           name: opt.name as string,
-          mediaPath: path.join(process.cwd(), folder),
+          mediaPath: dir,
         });
       }
     });

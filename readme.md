@@ -47,6 +47,7 @@ import { downBili } from 'downbili';
 | folder     | folder                                                          |
 | onComplete | 执行成功的回调                                                  |
 | format     | 转成音频的格式                                                  |
+| output     | 输出下载内容路径                                                      |
 
 `result`
 
@@ -71,6 +72,27 @@ const main = () => {
     level: 80,
     // 大会员使用 提高下载视频质量
     sessdata: '',
+    
+  };
+  downBili(opt);
+};
+
+main();
+```
+
+下载到当前目录
+
+```ts
+import { downBili, Option, AudioFormatEnum } from 'downbili';
+import path from 'path';
+
+const main = () => {
+  const output = path.join(process.cwd());
+  const opt: Option = {
+    // 下载地址
+    url: 'https://www.bilibili.com/video/xxx',
+    level: 80,
+    output
   };
   downBili(opt);
 };

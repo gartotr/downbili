@@ -36,14 +36,23 @@ export function createfolder(ul: string) {
   if (!ul) {
     throw new Error('the param is not input!');
   }
-  const folders = ul.split('/').filter(el => el);
-  let root = process.cwd();
+  // 判断是否为绝对路径
+  let root = path.isAbsolute(ul) ? path.resolve(ul.split('/').join(path.sep)) : process.cwd();
+  const folders = path.isAbsolute(ul) ? [] : ul.split('/').filter(el => el);
   for (let i = 0, len = folders.length; i < len; i++) {
     root = path.join(root, folders[i]);
     try {
       fs.statSync(root);
     } catch (err) {
       fs.mkdirSync(root);
+    }
+  }
+  // 如果是绝对路径且不存在，则创建
+  if (path.isAbsolute(ul)) {
+    try {
+      fs.statSync(root);
+    } catch (err) {
+      fs.mkdirSync(root, { recursive: true });
     }
   }
 }

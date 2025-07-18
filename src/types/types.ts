@@ -160,9 +160,13 @@ export interface Option {
    */
   fileName?: string;
   /**
-   * folder
+   * 导出到当前目录下的文件夹名称
    */
   folder?: string;
+  /**
+   * 导出的文件夹路径
+   */
+  output?: string;
   /**
    * 执行成功的回调
    */
