@@ -39,7 +39,7 @@ export function isString(o: unknown) {
  */
 export function createfolder(ul: string) {
   if (!ul) {
-    throw new Error('the param is not input!');
+    throw new Error('The param is not input!');
   }
   // 判断是否为绝对路径
   let root = path.isAbsolute(ul) ? path.resolve(ul.split('/').join(path.sep)) : process.cwd();
@@ -98,7 +98,7 @@ export function isMdurl(url: string): boolean {
 export function printType(type: string, name?: string, folder?: string) {
   const dirName = folder ?? 'media';
   const dir = path.join(process.cwd(), dirName);
-  console.log(`正在下载类型：${type} 名称：${name ?? ''}，位于${dir}`);
+  console.log(`Downloading：${type} name：${name ?? ''}，output${dir}`);
 }
 
 /**

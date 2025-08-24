@@ -35,9 +35,9 @@ export async function dealLink(opt: Option, options: RequestHeaderType, addr: Or
 
     if (res.code === -404 && res.message !== 'success') {
       if (opt.type && opt.type !== VideoTypeEnum.default) {
-        throw new Error(`请对应url视频类型`);
+        throw new Error(`Please correspond to the URL video type!!`);
       } else {
-        throw new Error('请传入sessdata!！');
+        throw new Error('Please pass in sessdata!!');
       }
     }
 

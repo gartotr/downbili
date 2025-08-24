@@ -1,27 +1,84 @@
-import { getVideoDownLinkByurl, dealLink, ArticulationEnum, UserAgent } from './exports';
+import { getVideoDownLinkByurl, dealLink, ArticulationEnum, UserAgent, AudioFormatEnum } from './exports';
 import type { Option, RequestHeaderType, DownFileMessage } from './types';
 
 /**
- * 下载哔哩哔哩的视频
- * @param {Option} opt
+ * 格式化参数
+ * @param {Option | string} option - 下载选项对象或视频URL字符串
+ * @param {AudioFormatEnum} [format] - 可选的音频格式
+ * @returns {Option} - 下载选项对象
  */
-export const downBili = async (opt: Option): Promise<DownFileMessage> => {
-  let {url, sessdata, level = ArticulationEnum._16} = opt;
-  if (!url) {
-    // 如果不存在就直接报错
-    throw new Error('必须传入url!!');
+function normalizeOptions(option: Option | string, format?: AudioFormatEnum): Option {
+  const argsIsString = typeof option === 'string';
+  const opt: Option = argsIsString ? { url: option } : { ...option };
+  if (argsIsString && format) {
+    opt.format = format;
   }
+  return opt;
+}
 
-  const requestHeader: RequestHeaderType = {
-    Referer: url,
-    Cookie: sessdata ? `SESSDATA=${ sessdata }` : '',
+/** 构建请求头
+ * @param {Option} opt - 下载选项对象
+ * @returns {RequestHeaderType} - 请求头对象
+ */
+function buildRequestHeader(opt: Option): RequestHeaderType {
+  return {
+    Referer: opt.url,
+    Cookie: opt.sessdata ? `SESSDATA=${opt.sessdata}` : '',
     'User-Agent': UserAgent,
   };
+}
 
-  if (sessdata) {
-    level = ArticulationEnum._1080PLUS;
-    opt.level = opt.level ?? ArticulationEnum._1080PLUS; // 有会员获取的视频自动设置为1080p+
+/** 校验参数
+ * @param {Option} opt - 下载选项对象
+ * @throws {Error} - 如果URL无效或不包含必需的参数
+ */
+function validateOptions(opt: Option): void {
+  if (!opt.url) {
+    throw new Error('URL is required');
   }
-  const addr = await getVideoDownLinkByurl(url, level);
-  return await dealLink(opt, requestHeader, addr, url);
-};
+  if (!opt.url.includes('bilibili.com')) {
+    throw new Error('Invalid Bilibili video URL');
+  }
+}
+
+/** 确定视频质量等级
+ * @param {Option} opt - 下载选项对象
+ * @returns {ArticulationEnum} - 视频等级
+ */
+function determineQualityLevel(opt: Option): ArticulationEnum {
+  if (opt.sessdata) {
+    return opt.level ?? ArticulationEnum._1080PLUS;
+  }
+  return opt.level ?? ArticulationEnum._16;
+}
+
+/**
+ * 下载哔哩哔哩的视频
+ * @param {Option} option - 完整的下载选项对象
+ * @returns {Promise<DownFileMessage>} - 返回下载文件的信息
+ */
+async function downBili(option: Option): Promise<DownFileMessage>;
+/**
+ * 下载哔哩哔哩的视频
+ * @param {string} url - 视频的URL
+ * @param {AudioFormatEnum} [format] - 可选的音频格式
+ * @returns {Promise<DownFileMessage>} - 返回下载文件的信息
+ */
+async function downBili(url: string, format?: AudioFormatEnum): Promise<DownFileMessage>;
+async function downBili(option: Option | string, format?: AudioFormatEnum): Promise<DownFileMessage> {
+  try {
+    const opt: Option = normalizeOptions(option, format);
+    validateOptions(opt);
+
+    const requestHeader = buildRequestHeader(opt);
+
+    const level = determineQualityLevel(opt);
+
+    const addr = await getVideoDownLinkByurl(opt.url, level);
+    return await dealLink(opt, requestHeader, addr, opt.url);
+  } catch (error) {
+    throw new Error(`Download failed: ${(error as Error).message}`);
+  }
+}
+
+export { downBili };

@@ -47,73 +47,84 @@ import { downBili } from 'downbili';
 | folder     | folder                                                          |
 | onComplete | 执行成功的回调                                                  |
 | format     | 转成音频的格式                                                  |
-| output     | 输出下载内容路径                                                      |
+| output     | 输出下载内容路径                                                |
 
 `result`
 
-| **参数**  | **描述**            |
-| --------- | ------------------- |
-| fPath     | 视频路径            |
-| cwd       | 当前文件的目录      |
-| name      | 视频名称            |
-| mediaPath | 带 media 文件夹路径 |
+| **参数**  | **描述**             |
+| --------- | -------------------- |
+| fPath     | 下载完成后的视频路径 |
+| cwd       | process.cwd          |
+| name      | 视频名称             |
+| mediaPath | 带 media 文件夹路径  |
 
 ### 仅下载视频
 
 默认下载到当前目录`/media`下
 
 ```ts
-import { downBili, Option, AudioFormatEnum } from 'downbili';
+import { downBili, Option } from 'downbili';
 
-const main = () => {
-  const opt: Option = {
-    // 下载地址
-    url: 'https://www.bilibili.com/video/xxx',
-    level: 80,
-    // 大会员使用 提高下载视频质量
-    sessdata: '',
-    
-  };
-  downBili(opt);
+const opt: Option = {
+  // 下载地址
+  url: 'https://www.bilibili.com/video/xxx',
+  level: 80,
+  // 大会员使用 提高下载视频质量
+  sessdata: '',
 };
-
-main();
+const result = await downBili(opt);
+console.log('res', result);
 ```
 
-下载到当前目录
+选择下载目录目录
 
 ```ts
-import { downBili, Option, AudioFormatEnum } from 'downbili';
+import { downBili, Option } from 'downbili';
 import path from 'path';
 
-const main = () => {
-  const output = path.join(process.cwd());
-  const opt: Option = {
-    // 下载地址
-    url: 'https://www.bilibili.com/video/xxx',
-    level: 80,
-    output
-  };
-  downBili(opt);
+const output = path.join(process.cwd());
+const opt: Option = {
+  // 下载地址
+  url: 'https://www.bilibili.com/video/xxx',
+  level: 80,
+  output,
 };
-
-main();
+const result = await downBili(opt);
+console.log('result', result);
 ```
 
-### 支持视频转成音频
+### 将视频转换成音频
 
 ```ts
 import { downBili, Option, AudioFormatEnum } from 'downbili';
 
-const main = () => {
-  const opt: Option = {
-    // 传入format
-    format: AudioFormatEnum.WAV,
-    url: 'https://www.bilibili.com/video/xxx',
-    sessdata: '',
-  };
-  downBili(opt);
+const opt: Option = {
+  // 传入format
+  format: AudioFormatEnum.WAV,
+  url: 'https://www.bilibili.com/video/xxx',
+  sessdata: '',
 };
+const result = await downBili(opt);
+console.log('result', result);
 
-main();
+```
+
+### 不传入配置
+
+只下载到默认目录, /media
+
+```ts
+import { downBili } from 'downbili';
+
+const url = 'https://www.bilibili.com/video/xxx';
+await downBili(url);
+```
+
+或者需要转成音频
+
+```ts
+import { downBili, AudioFormatEnum } from 'downbili';
+
+const url = 'https://www.bilibili.com/video/xxx';
+await downBili(url, AudioFormatEnum.MP3);
 ```

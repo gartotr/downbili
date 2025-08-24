@@ -20,9 +20,9 @@ function handleProgress(
   transform: boolean
 ): Promise<DownFileMessage> {
   return new Promise((resolve, reject) => {
-    const defaultCb = () => console.log('\n 下载成功！ \n');
+    const defaultCb = () => console.log('\n Download successfully! \n');
     const { progress, folder = 'media', name, onComplete = defaultCb } = opt;
-    const labelName = progress?.labelname ?? '正在下载：';
+    const labelName = progress?.labelname ?? 'Downloading：';
     const progressLength = progress?.length ?? 50;
 
     const pb = new ProgressBar(labelName, progressLength);
@@ -41,13 +41,13 @@ function handleProgress(
     }
 
     if (!opt.type || name === VideoTypeEnum.default) {
-      printType('视频', name, dir);
+      printType('Video', name, dir);
     }
     if (opt.type === VideoTypeEnum.silent) {
-      printType('无声视频', name, dir);
+      printType('Silent Video', name, dir);
     }
     if (opt.type === VideoTypeEnum.audio) {
-      printType('音频', name, dir);
+      printType('Audio', name, dir);
     }
 
     let completed = 0;

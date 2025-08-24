@@ -35,7 +35,7 @@ export function get_bvid(url: string): string {
     const match2 = url.match(/\/([^/]+?)\?/); // video/BV1122223sr?
     return match1 ? match1[1] : match2 ? match2[1] : '';
   } else {
-    throw new Error('is not bvid url...');
+    throw new Error('Is not bvid url...');
   }
 }
 
@@ -109,5 +109,5 @@ export async function getAvByurl(url: string): Promise<string> {
     const aid = await getAidByBvidurl(url);
     return String(aid);
   }
-  throw new Error('获取视频信息失败！');
+  throw new Error('Failed to get video information!');
 }

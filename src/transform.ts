@@ -37,7 +37,7 @@ function deleteSourceFile(resourcePath: string) {
   try {
     fs.unlinkSync(resourcePath);
   } catch (error) {
-    console.error(error);
+    throw new Error(`Deleting the source file failed: ${(error as Error).message}`);
   }
 }
 
