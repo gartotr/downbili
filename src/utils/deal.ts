@@ -1,6 +1,6 @@
-import { httpGet } from './httpio';
+import axios, { AxiosRequestConfig } from 'axios';
 import * as assist from './assist';
-import type { Option, DownFileMessage, httpGetResponseType } from '../types';
+import type { Option, DownFileMessage } from '../types';
 import { UserAgent, AudioFormatEnum } from '../constant';
 
 interface Headers {
@@ -20,9 +20,14 @@ export async function downloadOne(options: Option, url: string, referer: string 
   };
 
   const transform = Object.values(AudioFormatEnum).includes(options.format as AudioFormatEnum);
-  if (transform) {
-    headers.responseType = 'stream';
-  }
-  const response: httpGetResponseType = await httpGet({ url, headers });
-  return assist.progressWithoutCookie(response, options, transform);
+
+  const config: AxiosRequestConfig = {
+    headers,
+    maxRedirects: 5,
+    validateStatus: (status: number) => status >= 200 && status < 300,
+    responseType: 'stream',
+  };
+
+  const response = await axios.get(url, config);
+  return assist.progressWithoutCookie(response.data, options, transform);
 }
