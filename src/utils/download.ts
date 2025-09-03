@@ -1,6 +1,8 @@
-import { getAvByurl, getVideoMessageByav } from "./getVarious";
-import { ArticulationEnum, PLAYURL_API } from "../constant";
-import type { IWebInfo } from "../types";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Readable } from 'stream';
+import { getAvByurl, getVideoMessageByav, downloadFile } from '.';
+import { ArticulationEnum, PLAYURL_API, AudioFormatEnum } from '../constant';
+import type { IWebInfo, Option, DownFileMessage, RequestHeaderType } from '../types';
 
 /**
  * 再次对视频的信息进行一次封装
@@ -69,6 +71,27 @@ export const getVideoDownloadLinkByav = async (av: string, level: ArticulationEn
  * @returns B站视频下载地址
  */
 export const getVideoDownLinkByurl = async (url: string, level: ArticulationEnum): Promise<string | string[]> => {
-    const res = await getAvByurl(url);
-    return await getVideoDownloadLinkByav(res, level);
+  const res = await getAvByurl(url);
+  return await getVideoDownloadLinkByav(res, level);
 };
+
+/**
+ * 下载单个视频链接
+ * @param {Option} options 下载选项
+ * @param {string} url 视频链接
+ * @param {RequestHeaderType} headers 请求头
+ * @returns {Promise<DownFileMessage>} 返回文件路径信息
+ */
+export async function downloadOne(options: Option, url: string, headers: RequestHeaderType): Promise<DownFileMessage> {
+  const transform = Object.values(AudioFormatEnum).includes(options.format as AudioFormatEnum);
+
+  const config: AxiosRequestConfig<Readable> = {
+    headers,
+    maxRedirects: 5,
+    validateStatus: (status: number) => status >= 200 && status < 300,
+    responseType: 'stream',
+  };
+
+  const response: AxiosResponse<Readable> = await axios.get<Readable>(url, config);
+  return downloadFile(response, options, transform);
+}

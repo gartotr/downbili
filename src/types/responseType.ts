@@ -192,7 +192,7 @@ export interface DownLoadRequestResult {
 }
 
 /**
- * 下载完成后返回信息
+ * 文件路径信息
  */
 export interface DownFileMessage {
   /**

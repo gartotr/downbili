@@ -71,11 +71,11 @@ async function downBili(option: Option | string, format?: AudioFormatEnum): Prom
     validateOptions(opt);
 
     const requestHeader = buildRequestHeader(opt);
-
+    console.log('Request Headers:', requestHeader);
     const level = determineQualityLevel(opt);
 
-    const addr = await getVideoDownLinkByurl(opt.url, level);
-    return await dealLink(opt, requestHeader, addr, opt.url);
+    const address = await getVideoDownLinkByurl(opt.url, level);
+    return await dealLink(opt, requestHeader, address);
   } catch (error) {
     throw new Error(`Download failed: ${(error as Error).message}`);
   }

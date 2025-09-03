@@ -1,12 +1,23 @@
-import slog from "single-line-log";
+import slog from 'single-line-log';
 
 interface ProgressBarOptions {
   completed: number;
   total: number;
 }
 
-class ProgressBar {
+/** 进度条类
+ * @description 在控制台显示下载进度
+ * @param {string} description - 进度条描述
+ * @param {number} bar_length - 进度条长度
+ * @example
+ * const progressBar = new ProgressBar('Downloading', 30);
+ * progressBar.render({ completed: 50, total: 100 });
+ * // 输出: Downloading: 50.00% ⸨█████████████░░░░░░░░░░░░░░░░░⸩ 50/100
+ */
+export class ProgressBar {
+  // 进度条描述
   description: string;
+  // 进度条长度
   length: number;
 
   constructor(description: string = 'Progress', bar_length: number = 25) {

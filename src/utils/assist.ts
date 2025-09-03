@@ -1,33 +1,32 @@
 import fs from 'fs';
 import path from 'path';
-import { PassThrough } from 'stream';
+import { PassThrough, Readable } from 'stream';
+import type { AxiosResponse } from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
-import ProgressBar from './progress-bar';
-import { createfolder } from '.';
-import type { Option, ProgressOptions, httpGetResponseType, DownFileMessage } from '../types';
+import { createfolder, printType, setFfmpegPath, ProgressBar } from '.';
+import type { Option, ProgressOptions, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
-import { printType, setFfmpegPath } from '.';
+
 /**
- * 处理下载进度，支持将下载内容进行格式转换
- * @param res - HTTP响应对象或普通对象
+ * 处理文件下载和进度显示，支持格式转换
+ * @param {AxiosResponse<Readable>} res - axios响应流对象
  * @param opt - 下载选项，包含进度配置
  * @param transform - 是否需要进行格式转换
- * @returns 返回一个Promise，解析为包含文件路径等信息的对象，拒绝则返回错误
+ * @returns {Promise<DownFileMessage>} 返回文件路径信息
  */
-function handleProgress(
-  res: httpGetResponseType | Record<string, any>,
+export function downloadFile(
+  res: AxiosResponse<Readable>,
   opt: Option & { progress?: ProgressOptions },
   transform: boolean
 ): Promise<DownFileMessage> {
   return new Promise((resolve, reject) => {
-    const defaultCb = () => console.log('\n Download successfully! \n');
+    const defaultCb = () => console.log('\nDownload successfully!\n');
     const { progress, folder = 'media', name, onComplete = defaultCb } = opt;
     const labelName = progress?.labelname ?? 'Downloading：';
     const progressLength = progress?.length ?? 50;
-
+    const stream: Readable = res.data;
     const pb = new ProgressBar(labelName, progressLength);
-    const headers = res.headers;
-    const total = headers['content-length'];
+    const total = res.headers['content-length'];
     const outputDir = opt.output || folder;
     const dir = path.isAbsolute(outputDir) ? outputDir : path.join(process.cwd(), outputDir);
     createfolder(dir);
@@ -53,7 +52,8 @@ function handleProgress(
     let completed = 0;
     let passThroughStream: PassThrough | null = null;
     setFfmpegPath();
-    res.on('data', (chunk: Buffer) => {
+
+    stream.on('data', (chunk: Buffer) => {
       completed += chunk.length;
       pb.render({ completed, total });
 
@@ -81,7 +81,7 @@ function handleProgress(
       }
     });
 
-    res.on('end', () => {
+    stream.on('end', () => {
       if (transform) {
         passThroughStream?.end();
       } else {
@@ -95,24 +95,12 @@ function handleProgress(
       }
     });
 
-    res.on('error', (err: Error) => {
+    stream.on('error', (err: Error) => {
       reject(err);
     });
 
     if (!transform) {
-      res.pipe(fs.createWriteStream(fPath));
+      stream.pipe(fs.createWriteStream(fPath));
     }
   });
-}
-
-export function progressWithCookie(
-  res: httpGetResponseType,
-  opt: Option & { progress?: ProgressOptions },
-  transform: boolean
-): Promise<DownFileMessage> {
-  return handleProgress(res, opt, transform);
-}
-
-export function progressWithoutCookie(res: Record<string, any>, opt: Option, transform: boolean): Promise<DownFileMessage> {
-  return handleProgress(res, opt, transform);
 }
