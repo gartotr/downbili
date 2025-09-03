@@ -1,5 +1,5 @@
 import { OutgoingHttpHeader } from 'http';
-import { VideoTypeEnum, AudioFormatEnum } from '../constant';
+import { VideoTypeEnum, AudioFormatEnum, ArticulationEnum } from '../constant';
 
 /**
  * 请求配置
@@ -138,7 +138,7 @@ export interface Option {
   /**
    * 112是1080P+，80是1080P，64是720P+，32是480P，16是360P
    */
-  level?: number;
+  level?: ArticulationEnum;
   /**
    * sessdata sessdata后的一大串
    */
