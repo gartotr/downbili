@@ -62,10 +62,10 @@ async function downBili(option: Option): Promise<DownFileMessage>;
  * 下载哔哩哔哩的视频
  * @param {string} url - 视频的URL
  * @param {AudioFormatEnum} [format] - 可选的音频格式
- * @returns {Promise<DownFileMessage>} - 返回下载文件的信息
+ * @returns {Promise<DownFileMessage | DownFileMessage[]>} - 返回下载文件的信息
  */
 async function downBili(url: string, format?: AudioFormatEnum): Promise<DownFileMessage>;
-async function downBili(option: Option | string, format?: AudioFormatEnum): Promise<DownFileMessage> {
+async function downBili(option: Option | string, format?: AudioFormatEnum): Promise<DownFileMessage | DownFileMessage[]> {
   try {
     const opt: Option = normalizeOptions(option, format);
     validateOptions(opt);
