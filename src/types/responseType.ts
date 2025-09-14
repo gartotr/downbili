@@ -63,13 +63,22 @@ export interface IPage {
 }
 
 export interface WebData {
+  /**
+   * bvid
+   */
   bvid: string;
+  /**
+   * aid
+   */
   aid: number;
   videos: number;
   tid: number;
   tname: string;
   copyright: number;
   pic: string;
+  /**
+   * 视频标题
+   */
   title: string;
   pubdate: number;
   ctime: number;
@@ -93,6 +102,8 @@ export interface WebData {
   stat: IStat;
   pages: IPage[];
 }
+
+export type WebObject = Pick<WebData, 'aid' | 'title'>;
 
 export type WebTextObjectData = Response<{ data: WebData }>;
 

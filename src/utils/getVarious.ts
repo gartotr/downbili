@@ -2,7 +2,7 @@ import axios from 'axios';
 import { parse } from 'url';
 import { isAvurl } from '.';
 import { PAGE_LIST_API, WEB_INTERFACE_API } from '../constant';
-import type { PlayerTextObject, WebData, WebTextObjectData, WebTextObject } from '../types';
+import type { PlayerTextObject, WebData, WebTextObjectData, WebTextObject, WebObject } from '../types';
 
 /**
  * 根据视频播放地址获取 视频的av号
@@ -108,6 +108,30 @@ export async function getAvByurl(url: string): Promise<string> {
   if (isbvidurl(url)) {
     const aid = await getAidByBvidurl(url);
     return String(aid);
+  }
+  throw new Error('Failed to get video information!');
+}
+
+/**
+ * 根据视频播放地址获取 视频的aid&title
+ * @param {string} url 视频的播放地址
+ * @returns {Promise<string>}
+ */
+export async function getWebObject(url: string): Promise<WebObject> {
+  if (isAvurl(url)) {
+    return {
+      aid: Number(getavByavurl(url)),
+      title: '',
+    };
+  }
+
+  // 判断是不是视频地址
+  if (isbvidurl(url)) {
+    const { aid, title } = await getViewByBvidUrl(url);
+    return {
+      aid,
+      title: title ?? '',
+    };
   }
   throw new Error('Failed to get video information!');
 }

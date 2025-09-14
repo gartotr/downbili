@@ -144,7 +144,7 @@ export interface Option {
    */
   sessdata?: string;
   /**
-   * 默认名称（自己获取）
+   * 默认视频标题（自己获取）
    */
   defaultName?: string;
   /**
@@ -171,6 +171,10 @@ export interface Option {
    * 执行成功的回调
    */
   onComplete?: () => void;
+  /**
+   * 执行失败的回调
+   */
+  onError?: () => void;
   /**
    * 转音频必传
    */
@@ -211,4 +215,9 @@ export interface FormatDefaultType {
    * 视频url
    */
   url: string;
+}
+
+export interface DownLinkResult {
+  links: string | string[];
+  title: string;
 }

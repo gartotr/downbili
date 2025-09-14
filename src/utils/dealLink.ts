@@ -6,22 +6,31 @@ import { downloadOne, withSelectedAddress } from '.';
 
 /**
  * 处理文件名和扩展名
+ * @param {Option} option - 下载选项配置
+ * @param {string} url - 视频URL
  */
-function handleFileNameAndExt(opt: Option, url: string): void {
-  const match = url.match(/\/([^\/]+?)\?/) || [];
-  opt.defaultName = match[1]?.trim() || '';
-  let ext: string = path.parse(opt.defaultName).ext;
+function handleFileNameAndExt(option: Option, url: string): void {
+  // URL提取文件名
+  const match = url.match(/\/([^\/]+?)\?/);
+  const matchName = match?.[1]?.trim() || '';
+  const parsedPath = path.parse(matchName);
 
-  if (ext === '.m4s') {
-    if (opt.type === VideoTypeEnum.silent) {
-      ext = '.mp4';
-    } else if (opt.type === VideoTypeEnum.audio) {
-      ext = '.mp3';
+  // 确定扩展名
+  let finalExt = parsedPath.ext;
+  if (finalExt === '.m4s') {
+    if (option.type === VideoTypeEnum.silent) {
+      finalExt = '.mp4';
     }
-    opt.defaultName = path.parse(opt.defaultName).name + ext;
+    if (option.type === VideoTypeEnum.audio) {
+      finalExt = '.mp3';
+    }
   }
 
-  opt.name = (opt.fileName && opt.fileName + ext) || opt.defaultName;
+  // 文件名（不含扩展名）
+  const baseName = option.defaultName || parsedPath.name;
+
+  // 生成最终文件名
+  option.name = option.fileName ? option.fileName + finalExt : baseName + finalExt;
 }
 
 /**
@@ -34,24 +43,23 @@ async function downloadVideoUrl(opt: Option, url: string, headers: RequestHeader
 
 /**
  * 输入链接下载视频
- * @param {Option} opt 视频下载配置
+ * @param {Option} option 视频下载配置
  * @param {RequestHeaderType} headers http请求头
- * @param {OrString} addr B站视频下载地址
+ * @param {OrString} address B站视频下载地址
  * @returns {Promise<DownFileMessage | DownFileMessage[]>} 下载完成后返回信息
  */
-export async function dealLink(opt: Option, headers: RequestHeaderType, addr: OrString): Promise<DownFileMessage | DownFileMessage[]> {
-  const finalAddr = withSelectedAddress(opt.url, addr);
+export async function dealLink(option: Option, headers: RequestHeaderType, address: OrString): Promise<DownFileMessage | DownFileMessage[]> {
+  const finalAddr = withSelectedAddress(option.url, address);
 
   const res: DownloadObject = await axios.get(finalAddr, { headers });
-
   // 检查响应状态
   if (res.code === -404 && res.message !== 'success') {
-    const hasNonDefaultType = opt.type && opt.type !== VideoTypeEnum.default;
+    const hasNonDefaultType = option.type && option.type !== VideoTypeEnum.default;
     throw new Error(hasNonDefaultType ? 'Please correspond to the URL video type!!' : 'Please pass in sessdata!!');
   }
 
   const data: DownLoadRequestResult = res.data;
-  const durl: Durl[] = !opt.type || opt.type === VideoTypeEnum.default ? data.data.durl : [];
+  const durl: Durl[] = !option.type || option.type === VideoTypeEnum.default ? data.data.durl : [];
 
   if (durl.length === 0) {
     throw new Error('No downloadable video link found.');
@@ -59,10 +67,10 @@ export async function dealLink(opt: Option, headers: RequestHeaderType, addr: Or
 
   // 单文件
   if (durl.length === 1) {
-    return await downloadVideoUrl(opt, durl[0].url, headers);
+    return await downloadVideoUrl(option, durl[0].url, headers);
   }
 
   // 多文件
-  const downloadPromises = durl.map(({ url }) => downloadVideoUrl(opt, url, headers));
+  const downloadPromises = durl.map(({ url }) => downloadVideoUrl(option, url, headers));
   return await Promise.all(downloadPromises);
 }

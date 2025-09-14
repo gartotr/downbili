@@ -52,6 +52,10 @@ function determineQualityLevel(opt: Option): ArticulationEnum {
   return opt.level ?? ArticulationEnum._16;
 }
 
+function setDefaultName(opt: Option, title: string): void {
+  opt.defaultName = title;
+}
+
 /**
  * 下载哔哩哔哩的视频
  * @param {Option} option - 完整的下载选项对象
@@ -73,8 +77,9 @@ async function downBili(option: Option | string, format?: AudioFormatEnum): Prom
     const requestHeader = buildRequestHeader(opt);
     const level = determineQualityLevel(opt);
 
-    const address = await getVideoDownLinkByurl(opt.url, level);
-    return await dealLink(opt, requestHeader, address);
+    const downLinkInfo = await getVideoDownLinkByurl(opt.url, level);
+    setDefaultName(opt, downLinkInfo.title);
+    return await dealLink(opt, requestHeader, downLinkInfo.links);
   } catch (error) {
     throw new Error(`Download failed: ${(error as Error).message}`);
   }

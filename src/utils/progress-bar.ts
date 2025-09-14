@@ -12,7 +12,7 @@ interface ProgressBarOptions {
  * @example
  * const progressBar = new ProgressBar('Downloading', 30);
  * progressBar.render({ completed: 50, total: 100 });
- * // 输出: Downloading: 50.00% ⸨█████████████░░░░░░░░░░░░░░░░░⸩ 50/100
+ * 输出: Downloading: 50.00% ⸨█████████████░░░░░░░░░░░░░░░░░⸩ 50/100
  */
 export class ProgressBar {
   // 进度条描述
@@ -32,7 +32,11 @@ export class ProgressBar {
     const cell = '█'.repeat(cell_num);
     const empty = '░'.repeat(this.length - cell_num);
 
-    const cmdText = `${this.description}: ${(100 * percent).toFixed(2)}% ⸨${cell}${empty}⸩ ${opts.completed}/${opts.total}`;
+    // 将字节转换为MB格式
+    const completedMB = (opts.completed / 1024 / 1024).toFixed(2);
+    const totalMB = (opts.total / 1024 / 1024).toFixed(2);
+
+    const cmdText = `${this.description}: ${(100 * percent).toFixed(2)}% ⸨${cell}${empty}⸩ ${completedMB}MB/${totalMB}MB`;
     slog.stdout(cmdText);
   }
 }

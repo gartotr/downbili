@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Readable } from 'stream';
-import { getAvByurl, getVideoMessageByav, downloadFile } from '.';
+import { getWebObject, getVideoMessageByav, downloadFile } from '.';
 import { ArticulationEnum, PLAYURL_API, AudioFormatEnum } from '../constant';
-import type { IWebInfo, Option, DownFileMessage, RequestHeaderType } from '../types';
+import type { IWebInfo, Option, DownFileMessage, RequestHeaderType, DownLinkResult } from '../types';
 
 /**
  * 再次对视频的信息进行一次封装
@@ -68,11 +68,15 @@ export const getVideoDownloadLinkByav = async (av: string, level: ArticulationEn
  * 根据 视频播放地址 获取 视频的下载链接信息
  * @param {string} url 视频的播放地址
  * @param {ArticulationEnum} level
- * @returns B站视频下载地址
+ * @returns {DownLinkResult} 包含链接、标题信息
  */
-export const getVideoDownLinkByurl = async (url: string, level: ArticulationEnum): Promise<string | string[]> => {
-  const res = await getAvByurl(url);
-  return await getVideoDownloadLinkByav(res, level);
+export const getVideoDownLinkByurl = async (url: string, level: ArticulationEnum): Promise<DownLinkResult> => {
+  const webObject = await getWebObject(url);
+  const downloadLinkByav = await getVideoDownloadLinkByav(webObject.aid.toString(), level);
+  return {
+    title: webObject.title,
+    links: downloadLinkByav,
+  }
 };
 
 /**
