@@ -84,32 +84,14 @@ export function getMidByUrl(url: string): string {
 }
 
 /**
- * 根据视频的av号获取视频的信息
- * @param  {string} av 视频的av号
+ * 根据视频的aid号获取视频的信息
+ * @param  {string} aid 视频的aid号
  * @returns {Promise<{WebTextObject}>}
  */
-export async function getVideoMessageByav(av: string): Promise<WebTextObject> {
-  const api = `${WEB_INTERFACE_API}?aid=${av}`;
+export async function getVideoMessageByAid(aid: string | number): Promise<WebTextObject> {
+  const api = `${WEB_INTERFACE_API}?aid=${aid}`;
   const res = await axios.get<WebTextObject>(api);
   return res.data;
-}
-
-/**
- * 根据视频播放地址获取 视频的av号
- * @param {string} url 视频的播放地址
- * @returns {Promise<string>}
- */
-export async function getAvByurl(url: string): Promise<string> {
-  if (isAvurl(url)) {
-    return getavByavurl(url);
-  }
-
-  // 判断是不是视频地址
-  if (isbvidurl(url)) {
-    const aid = await getAidByBvidurl(url);
-    return String(aid);
-  }
-  throw new Error('Failed to get video information!');
 }
 
 /**
@@ -134,4 +116,13 @@ export async function getWebObject(url: string): Promise<WebObject> {
     };
   }
   throw new Error('Failed to get video information!');
+}
+
+/**
+ * 是否是番剧 目前只识别bangumi
+ * @param {string} url 视频的播放地址
+ * @returns {boolean}
+ */
+export function isBangumi(url: string): boolean {
+  return url.includes('bangumi');
 }

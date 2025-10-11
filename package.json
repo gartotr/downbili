@@ -8,7 +8,8 @@
   "scripts": {
     "build": "rimraf dist && pnpm build:rollup && pnpm build:types",
     "build:rollup": "rollup -c",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist/types"
+    "build:types": "tsc --emitDeclarationOnly --outDir dist/types",
+    "tsx": "tsx ./demo.ts"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "axios": "^1.6.2",
+    "cheerio": "^1.1.2",
     "fluent-ffmpeg": "^2.1.2",
     "single-line-log": "^1.1.2"
   },

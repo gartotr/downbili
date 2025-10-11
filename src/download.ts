@@ -76,7 +76,7 @@ async function downBili(option: Option | string, format?: AudioFormatEnum): Prom
 
     const requestHeader = buildRequestHeader(opt);
     const level = determineQualityLevel(opt);
-
+    
     const downLinkInfo = await getVideoDownLinkByurl(opt.url, level);
     setDefaultName(opt, downLinkInfo.title);
     return await dealLink(opt, requestHeader, downLinkInfo.links);

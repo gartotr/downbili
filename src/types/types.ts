@@ -221,3 +221,12 @@ export interface DownLinkResult {
   links: string | string[];
   title: string;
 }
+
+/**
+ * arc对象，包含aid cid bvid
+ */
+export interface ArcObject {
+  aid: number;
+  cid: number;
+  bvid: string;
+}

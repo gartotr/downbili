@@ -30,6 +30,8 @@ export const DEFAULT_CONVERTER = 'mp3';
 
 /**
  * 视频清晰度
+ * @description _480和_16下载的都是360p
+ * @description _720以上暂时最高只能720p
  */
 export enum ArticulationEnum {
   /**
@@ -45,13 +47,13 @@ export enum ArticulationEnum {
    */
   _720 = 64,
   /**
-   * 480P
+   * 360P
    */
   _480 = 32,
   /**
    * 360P
    */
-  _16 = 360,
+  _16 = 16,
 }
 
 /**

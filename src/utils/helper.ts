@@ -168,3 +168,14 @@ export function getUniqueFilePath(dir: string, filename: string): string {
     if (!fs.existsSync(candidateFull)) return candidateFull;
   }
 }
+
+/**
+ * 正则匹配 arc:{...}
+ * @param {string} scriptContent script内容
+ * @returns
+ */
+export function extractArcFields(scriptContent: string): string | null {
+  const arcRegex = /"arc"\s*:\s*(\{[^}]+\})/;
+  const match = scriptContent.match(arcRegex);
+  return match ? match[1] : null;
+}

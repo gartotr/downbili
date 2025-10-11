@@ -68,7 +68,7 @@ export interface WebData {
    */
   bvid: string;
   /**
-   * aid
+   * aid 就是av号
    */
   aid: number;
   videos: number;
