@@ -7,7 +7,20 @@ import { terser } from 'rollup-plugin-terser';
 
 const commonConfig = {
   input: 'src/index.ts', // 修改为你的源码入口路径
-  external: ['axios', 'fluent-ffmpeg', 'single-line-log', 'path', 'fs', 'child_process'],
+  external: [
+    'axios',
+    'cheerio',
+    'fluent-ffmpeg',
+    'single-line-log',
+    '@ffmpeg-installer/ffmpeg',
+    'path',
+    'fs',
+    'stream',
+    'module',
+    'url',
+    'http',
+    'child_process',
+  ],
   plugins: [
     resolve({
       preferBuiltins: true,
