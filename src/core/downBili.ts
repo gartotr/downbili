@@ -1,5 +1,7 @@
-import { getVideoDownLinkByurl, dealLink, ArticulationEnum, UserAgent, AudioFormatEnum } from './exports';
-import type { Option, RequestHeaderType, DownFileMessage } from './types';
+import { getVideoDownLinkByurl } from '../bilibili';
+import { dealLink } from './dealLink';
+import { ArticulationEnum, UserAgent, AudioFormatEnum } from '../constant';
+import type { Option, RequestHeaderType, DownFileMessage } from '../types';
 
 /**
  * 格式化参数
@@ -76,7 +78,7 @@ async function downBili(option: Option | string, format?: AudioFormatEnum): Prom
 
     const requestHeader = buildRequestHeader(opt);
     const level = determineQualityLevel(opt);
-    
+
     const downLinkInfo = await getVideoDownLinkByurl(opt.url, level);
     setDefaultName(opt, downLinkInfo.title);
     return await dealLink(opt, requestHeader, downLinkInfo.links);

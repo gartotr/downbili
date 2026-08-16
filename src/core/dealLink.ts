@@ -1,8 +1,8 @@
-import axios from 'axios';
 import path from 'path';
-import type { Option, OrString, RequestHeaderType, DownloadObject, Durl, DownLoadRequestResult, DownFileMessage } from '../types';
+import type { Option, OrString, RequestHeaderType, Durl, DownFileMessage } from '../types';
 import { VideoTypeEnum } from '../constant';
-import { downloadOne, withSelectedAddress } from '.';
+import { downloadOne } from './downloadOne';
+import { fetchDurl } from '../bilibili';
 
 /**
  * 处理文件名和扩展名
@@ -49,21 +49,7 @@ async function downloadVideoUrl(opt: Option, url: string, headers: RequestHeader
  * @returns {Promise<DownFileMessage | DownFileMessage[]>} 下载完成后返回信息
  */
 export async function dealLink(option: Option, headers: RequestHeaderType, address: OrString): Promise<DownFileMessage | DownFileMessage[]> {
-  const finalAddr = withSelectedAddress(option.url, address);
-
-  const res: DownloadObject = await axios.get(finalAddr, { headers });
-  // 检查响应状态
-  if (res.code === -404 && res.message !== 'success') {
-    const hasNonDefaultType = option.type && option.type !== VideoTypeEnum.default;
-    throw new Error(hasNonDefaultType ? 'Please correspond to the URL video type!!' : 'Please pass in sessdata!!');
-  }
-
-  const data: DownLoadRequestResult = res.data;
-  const durl: Durl[] = !option.type || option.type === VideoTypeEnum.default ? data.data.durl : [];
-
-  if (durl.length === 0) {
-    throw new Error('No downloadable video link found.');
-  }
+  const durl: Durl[] = await fetchDurl(option, headers, address);
 
   // 单文件
   if (durl.length === 1) {

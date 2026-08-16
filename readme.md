@@ -1,132 +1,169 @@
-# downBili
+# downbili
 
-B 站 URL 下载视频
+B 站视频下载库（TypeScript / Node.js），支持 av 号、BV 号与番剧链接，可自定义清晰度并转码为音频。
 
-**仅供交流学习使用**
+> **仅供交流学习使用。** 请勿将下载的资源用于任何恶意用途或商业目的。
 
-**严重警告：不可以将获取的资源用于恶意用途**
+## 特性
 
-## Installing
+- 链接下载视频
+- 清晰度可选：360P ~ 1080P+（>720P 需登录）
+- 内置 ffmpeg，可直接转音频（MP3 / AAC / WAV / FLAC 等）
+- 自定义输出目录与文件名
+- 提供命令行工具 `downbili`
 
-包管理
-
-Using pnpm:
+## 安装
 
 ```bash
+# pnpm
 pnpm install downbili
-```
 
-Using npm:
-
-```bash
+# npm
 npm install downbili
-```
 
-Using yarn:
-
-```bash
+# yarn
 yarn add downbili
 ```
 
-## Get started
+## 快速开始
+
+```ts
+import { downBili } from 'downbili';
+
+const result = await downBili('https://www.bilibili.com/video/BVxxxxxxx');
+console.log(result);
+// { fPath, cwd, name, mediaPath }
+```
+
+默认下载到当前目录下的 `media/` 文件夹。
+
+## API
 
 ### downBili
 
 ```ts
-import { downBili } from 'downbili';
+async function downBili(option: Option): Promise<DownFileMessage>;
+async function downBili(url: string, format?: AudioFormatEnum): Promise<DownFileMessage>;
 ```
 
-`option`
+`downBili` 支持两种调用方式：
 
-| **参数**   | **描述**                                                        |
-| ---------- | --------------------------------------------------------------- |
-| url        | 视频 URL                                                        |
-| level      | 112 是 1080P+，80 是 1080P，64 是 720P+，32 是 480P，16 是 360P |
-| sessdata   | 你的 sessdata                                                   |
-| name       | 文件名称（自己获取）                                            |
-| type       | 视频类型                                                        |
-| fileName   | 文件名称                                                        |
-| folder     | folder                                                          |
-| onComplete | 执行成功的回调                                                  |
-| format     | 转成音频的格式                                                  |
-| output     | 输出下载内容路径                                                |
+1. 传入 `Option` 配置对象，完整控制下载行为；
+2. 传入视频 URL 字符串，可附带 `format` 直接转音频。
 
-`result`
+> 注意：多分片视频的返回结果实际为 `DownFileMessage[]`（数组），请以运行时结果为准。
 
-| **参数**  | **描述**             |
-| --------- | -------------------- |
-| fPath     | 下载完成后的视频路径 |
-| cwd       | process.cwd          |
-| name      | 视频名称             |
-| mediaPath | 带 media 文件夹路径  |
+### Option 参数
 
-### 仅下载视频
+| 参数         | 类型                    | 说明                                        |
+| ------------ | ----------------------- | ------------------------------------------- |
+| `url`        | `string`                | 视频链接（必填）                            |
+| `level`      | `ArticulationEnum`      | 视频清晰度，默认无 `sessdata` 为 360P       |
+| `sessdata`   | `string`                | B 站登录 Cookie，可提升清晰度上限           |
+| `type`       | `VideoTypeEnum`         | 视频类型：`silent` / `audio` / `default`    |
+| `fileName`   | `string`                | 输出文件名（不含扩展名）                    |
+| `folder`     | `string`                | 输出目录，默认 `media`                      |
+| `output`     | `string`                | 输出绝对路径（优先级高于 `folder`）         |
+| `format`     | `AudioFormatEnum`       | 设置后下载并转为音频                        |
+| `onComplete` | `() => void`            | 下载完成回调                                |
+| `onError`    | `() => void`            | 下载失败回调                                |
 
-默认下载到当前目录`/media`下
+### 返回值 DownFileMessage
+
+| 参数        | 说明                    |
+| ----------- | ----------------------- |
+| `fPath`     | 下载完成后的文件路径    |
+| `cwd`       | 运行时的 `process.cwd()` |
+| `name`      | 文件名                  |
+| `mediaPath` | 输出目录                |
+
+### 枚举
 
 ```ts
-import { downBili, Option } from 'downbili';
+enum ArticulationEnum {
+  _1080PLUS = 112, // 1080P+
+  _1080     = 80,  // 1080P
+  _720      = 64,  // 720P
+  _480      = 32,  // 360P
+  _16       = 16,  // 360P
+}
+
+enum AudioFormatEnum {
+  MP3 = 'mp3', AAC = 'aac', WAV = 'wav', FLAC = 'flac',
+  ALAC = 'alac', OGG = 'ogg', APE = 'ape', WMA = 'wma', M4A = 'm4a',
+}
+
+enum VideoTypeEnum {
+  silent = 'silent', // 无声视频
+  audio  = 'audio',  // 纯音频
+  default = 'default',
+}
+```
+
+## 使用示例
+
+### 指定清晰度下载
+
+```ts
+import { downBili, ArticulationEnum, type Option } from 'downbili';
 
 const opt: Option = {
-  // 下载地址
-  url: 'https://www.bilibili.com/video/xxx',
-  level: 80,
-  // 大会员使用 提高下载视频质量
-  sessdata: '',
+  url: 'https://www.bilibili.com/video/BVxxxxxxx',
+  level: ArticulationEnum._1080,
+  sessdata: 'xxxxxxxx', // 大会员可下载更高清晰度
 };
+
 const result = await downBili(opt);
-console.log('res', result);
 ```
 
-选择下载目录目录
-
-```ts
-import { downBili, Option } from 'downbili';
-import path from 'path';
-
-const output = path.join(process.cwd());
-const opt: Option = {
-  // 下载地址
-  url: 'https://www.bilibili.com/video/xxx',
-  level: 80,
-  output,
-};
-const result = await downBili(opt);
-console.log('result', result);
-```
-
-### 将视频转换成音频
-
-```ts
-import { downBili, Option, AudioFormatEnum } from 'downbili';
-
-const opt: Option = {
-  // 传入format
-  format: AudioFormatEnum.WAV,
-  url: 'https://www.bilibili.com/video/xxx',
-  sessdata: '',
-};
-const result = await downBili(opt);
-console.log('result', result);
-
-```
-
-### 不传入配置
-
-只下载到默认目录, /media
-
-```ts
-import { downBili } from 'downbili';
-
-const url = 'https://www.bilibili.com/video/xxx';
-await downBili(url);
-```
-
-或者需要转成音频
+### 下载并转音频
 
 ```ts
 import { downBili, AudioFormatEnum } from 'downbili';
 
-const url = 'https://www.bilibili.com/video/xxx';
-await downBili(url, AudioFormatEnum.MP3);
+// 方式一：配置对象
+const result = await downBili({
+  url: 'https://www.bilibili.com/video/BVxxxxxxx',
+  format: AudioFormatEnum.MP3,
+});
+
+// 方式二：直接传 URL + 格式
+await downBili('https://www.bilibili.com/video/BVxxxxxxx', AudioFormatEnum.WAV);
 ```
+
+### 自定义输出目录
+
+```ts
+import path from 'path';
+import { downBili, type Option } from 'downbili';
+
+const opt: Option = {
+  url: 'https://www.bilibili.com/video/BVxxxxxxx',
+  output: path.join(process.cwd(), 'downloads'),
+};
+```
+
+## 命令行
+
+```bash
+downbili <视频链接> [选项]
+```
+
+| 选项                  | 说明                                             |
+| --------------------- | ------------------------------------------------ |
+| `-h, --help`          | 显示帮助                                         |
+| `--sessdata <值>`     | 传入 sessdata，提升清晰度上限                    |
+| `--level <清晰度>`    | `360` / `480` / `720` / `1080` / `1080+`         |
+| `--format <格式>`     | 下载后转为音频，如 `mp3`、`aac`、`wav`           |
+
+```bash
+downbili https://www.bilibili.com/video/BVxxxxxxx --level 1080 --sessdata xxxxxx
+downbili https://www.bilibili.com/video/BVxxxxxxx --format mp3
+```
+
+## 注意事项
+
+- ffmpeg 已通过 `@ffmpeg-installer/ffmpeg` 内置，无需额外安装
+- 未登录时最高下载 360P；无 `sessdata` 时默认 360P，有则默认 1080P+
+- 高清资源（>720P）需要大会员账号
+- 视频仅供学习交流使用，请遵守相关法律法规

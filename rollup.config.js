@@ -1,9 +1,8 @@
 import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
-import dts from 'rollup-plugin-dts';
-import json from '@rollup/plugin-json';
 import { terser } from 'rollup-plugin-terser';
+import { builtinModules } from 'node:module';
 
 const commonConfig = {
   input: 'src/index.ts', // 修改为你的源码入口路径
@@ -13,13 +12,7 @@ const commonConfig = {
     'fluent-ffmpeg',
     'single-line-log',
     '@ffmpeg-installer/ffmpeg',
-    'path',
-    'fs',
-    'stream',
-    'module',
-    'url',
-    'http',
-    'child_process',
+    ...builtinModules,
   ],
   plugins: [
     resolve({
@@ -27,14 +20,12 @@ const commonConfig = {
     }),
     commonjs(),
     typescript({
-      useTsconfigDeclarationDir: true,
       tsconfigOverride: {
         compilerOptions: {
-          declarationDir: 'dist/types',
+          declaration: false,
         },
       },
     }),
-    json(),
     terser({
       format: {
         comments: false
@@ -61,13 +52,13 @@ export default [
     },
   },
   {
-    input: 'dist/types/index.d.ts',
-    output: [
-      {
-        file: 'dist/types/index.d.ts',
-        format: 'es',
-      },
-    ],
-    plugins: [dts()],
+    input: 'src/cli.ts',
+    output: {
+      file: 'dist/cli.js',
+      format: 'cjs',
+      banner: '#!/usr/bin/env node',
+    },
+    plugins: [...commonConfig.plugins],
+    external: commonConfig.external,
   },
 ];

@@ -24,11 +24,6 @@ export const WEB_INTERFACE_API = `${PREFIX}/x/web-interface/view`;
 export const PAGE_LIST_API = `${PREFIX}/x/player/pagelist`;
 
 /**
- * 默认转换格式
- */
-export const DEFAULT_CONVERTER = 'mp3';
-
-/**
  * 视频清晰度
  * @description _480和_16下载的都是360p
  * @description _720以上暂时最高只能720p

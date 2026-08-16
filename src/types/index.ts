@@ -1,2 +1,2 @@
-export * from './responseType'
-export * from './types'
+export * from './bilibili';
+export * from './domain';

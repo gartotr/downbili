@@ -3,9 +3,8 @@ import path from 'path';
 import { PassThrough, Readable } from 'stream';
 import type { AxiosResponse } from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
-import { createfolder, printType, setFfmpegPath, ProgressBar, getUniqueFilePath } from '.';
+import { createfolder, printType, setFfmpegPath, ProgressBar, getUniqueFilePath } from '../utils';
 import type { Option, DownFileMessage } from '../types';
-import { VideoTypeEnum } from '../constant';
 
 interface DownloadConfig {
   stream: Readable;
@@ -95,14 +94,8 @@ function initializeDownloadConfig(option: Option, res: AxiosResponse<Readable>, 
  * @param {string} outputDir - 输出目录
  */
 function printDownloadType(option: Option, outputDir: string): void {
-  const { type, name } = option;
-  if (!type || name === VideoTypeEnum.default) {
-    printType('Video', name, outputDir);
-  } else if (type === VideoTypeEnum.silent) {
-    printType('Silent Video', name, outputDir);
-  } else if (type === VideoTypeEnum.audio) {
-    printType('Audio', name, outputDir);
-  }
+  const { name } = option;
+  printType('Video', name, outputDir);
 }
 
 /**

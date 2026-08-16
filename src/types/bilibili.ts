@@ -8,13 +8,6 @@ export interface Response<T> {
   data: T;
 }
 
-/**
- * x/player/pagelist result
- */
-export interface PlayerResponse {
-  text: string;
-}
-
 export interface TextData {
   cid: number;
   page: number;
@@ -36,10 +29,6 @@ export type PlayerTextObject = Response<{ data: TextData[] }>;
 /**
  * web-interface/view result
  */
-export interface WebResponse {
-  text: string;
-}
-
 export interface IOwner {
   mid: number;
   name: string;
@@ -109,24 +98,6 @@ export type WebTextObjectData = Response<{ data: WebData }>;
 
 export type WebTextObject = Response<WebData>;
 
-export interface IWebInfo {
-  aid: number;
-  tname: string;
-  tid: number;
-  pic: string;
-  title: string;
-  desc: string;
-  url: string;
-  name: string;
-  mid: number;
-  face: string;
-  cid: number;
-  like: number;
-  dislike: number;
-  pages: IPage[];
-  redirect_url: string;
-}
-
 export interface Durl {
   /**
    * 不知道
@@ -187,39 +158,8 @@ export interface DownloadInfo {
 export type DownloadObject = Response<DownLoadRequestResult> & { result: { dash: any } };
 
 /**
- * httpGet返回
- */
-export interface httpGetResponseType {
-  headers: Object;
-  pipe: Function;
-  on: Function;
-}
-
-/**
  * 请求Url返回
  */
 export interface DownLoadRequestResult {
   data: DownloadInfo;
-}
-
-/**
- * 文件路径信息
- */
-export interface DownFileMessage {
-  /**
-   * 文件路径
-   */
-  fPath: string;
-  /**
-   * 当前目录
-   */
-  cwd: string;
-  /**
-   * 文件名称
-   */
-  name: string;
-  /**
-   * 带media文件夹路径
-   */
-  mediaPath: string;
 }
