@@ -12,6 +12,7 @@
     "build": "rimraf dist && pnpm build:rollup && pnpm build:types",
     "build:rollup": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly --outDir dist/types",
+    "prepublishOnly": "pnpm build",
     "tsx": "tsx ./demo.ts"
   },
   "repository": {
@@ -20,7 +21,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gartotr/downbili/issues"
   },

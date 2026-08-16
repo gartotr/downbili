@@ -1,4 +1,3 @@
-import { parse } from 'url';
 import type { OrString } from '../types';
 
 /**
@@ -7,8 +6,8 @@ import type { OrString } from '../types';
  * @returns {string}
  */
 export function getavByavurl(avurl: string): string {
-  const path = parse(avurl).pathname;
-  return path?.replace('/video/av', '') ?? '';
+  const match = avurl.match(/\/video\/av(\d+)/);
+  return match ? match[1] : '';
 }
 
 /**
@@ -27,9 +26,8 @@ export function isbvidurl(url: string): boolean {
  */
 export function get_bvid(url: string): string {
   if (isbvidurl(url)) {
-    const match1 = url.match(/\/([^/]+?)\/\?/); // video/BV1122223sr/?
-    const match2 = url.match(/\/([^/]+?)\?/); // video/BV1122223sr?
-    return match1 ? match1[1] : match2 ? match2[1] : '';
+    const match = url.match(/\/video\/(BV[0-9a-zA-Z]+)/);
+    return match ? match[1] : '';
   } else {
     throw new Error('Is not bvid url...');
   }
