@@ -12,6 +12,7 @@ const commonConfig = {
     'fluent-ffmpeg',
     'single-line-log',
     '@ffmpeg-installer/ffmpeg',
+    'commander',
     ...builtinModules,
   ],
   plugins: [

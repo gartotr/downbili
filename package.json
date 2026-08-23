@@ -30,6 +30,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "axios": "^1.6.2",
     "cheerio": "^1.1.2",
+    "commander": "^15.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "single-line-log": "^1.1.2"
   },
