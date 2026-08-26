@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import chalk from 'chalk';
 import { downBili, ArticulationEnum, AudioFormatEnum } from './index';
 import type { Option } from './index';
 
@@ -49,7 +50,8 @@ async function main(): Promise<void> {
         opt.format = options.format;
       }
       const res = await downBili(opt);
-      console.log('下载完成:', res);
+      console.log(chalk.green('Download successfully!'));
+      console.log(chalk.blue(`File saved at: ${res.fPath}`));
     });
 
   await program.parseAsync();

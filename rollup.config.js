@@ -5,16 +5,8 @@ import { terser } from 'rollup-plugin-terser';
 import { builtinModules } from 'node:module';
 
 const commonConfig = {
-  input: 'src/index.ts', // 修改为你的源码入口路径
-  external: [
-    'axios',
-    'cheerio',
-    'fluent-ffmpeg',
-    'single-line-log',
-    '@ffmpeg-installer/ffmpeg',
-    'commander',
-    ...builtinModules,
-  ],
+  input: 'src/index.ts',
+  external: ['axios', 'cheerio', 'fluent-ffmpeg', 'single-line-log', '@ffmpeg-installer/ffmpeg', 'commander', 'chalk', ...builtinModules],
   plugins: [
     resolve({
       preferBuiltins: true,
@@ -29,9 +21,9 @@ const commonConfig = {
     }),
     terser({
       format: {
-        comments: false
-      }
-    })
+        comments: false,
+      },
+    }),
   ],
 };
 

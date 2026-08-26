@@ -1,7 +1,7 @@
 {
   "name": "downbili",
-  "version": "0.4.0",
-  "description": "fock ibili 下载视频",
+  "version": "0.4.1",
+  "description": "下载bilibili视频",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "bin": {
@@ -19,7 +19,11 @@
     "type": "git",
     "url": "git+https://github.com/gartotr/downbili.git"
   },
-  "keywords": [],
+  "keywords": [
+    "bilibili",
+    "B站",
+    "下载B站视频"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {
@@ -29,6 +33,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "axios": "^1.6.2",
+    "chalk": "^4.1.2",
     "cheerio": "^1.1.2",
     "commander": "^15.0.0",
     "fluent-ffmpeg": "^2.1.2",

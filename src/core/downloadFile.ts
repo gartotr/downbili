@@ -3,6 +3,7 @@ import path from 'path';
 import { PassThrough, Readable } from 'stream';
 import type { AxiosResponse } from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
+import chalk from 'chalk';
 import { createfolder, printType, setFfmpegPath, ProgressBar, getUniqueFilePath } from '../utils';
 import type { Option, DownFileMessage } from '../types';
 
@@ -17,7 +18,7 @@ interface DownloadConfig {
 /**
  * 默认完成执行函数
  */
-const defaultComplete = () => console.log('\nDownload successfully!\n');
+const defaultComplete = () => console.log(chalk.green('\nDownload successfully!\n'));
 
 /**
  * 验证下载参数
