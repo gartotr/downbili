@@ -1,13 +1,12 @@
 {
   "name": "downbili",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "下载bilibili视频",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "bin": {
     "downbili": "dist/cli.js"
   },
-  "type": "module",
   "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "rimraf dist && pnpm build:rollup && pnpm build:types",

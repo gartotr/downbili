@@ -57,10 +57,12 @@ export enum ArticulationEnum {
 export enum VideoTypeEnum {
   /**
    * 无声视频
+   * @deprecated 该类型已废弃
    */
   silent = 'silent',
   /**
    * 音频
+   * @deprecated 该类型已废弃
    */
   audio = 'audio',
   /**

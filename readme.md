@@ -1,6 +1,13 @@
 # downbili
 
-B 站视频下载库（TypeScript / Node.js），支持 av 号、BV 号与番剧链接，可自定义清晰度并转码为音频。
+一个 TypeScript / Node.js 编写的 B 站视频下载库，可以下载视频，可以把视频转换成音频。
+
+有时候你想下载的不是视频，只是视频里的那首歌，重新定义一下 B 站：
+
+> 视频网站 ❌
+> 音乐网站 ✅
+
+理论上只要 B 站上有视频，你就可以把它变成 MP3、AAC、WAV、FLAC……
 
 > **仅供交流学习使用。** 请勿将下载的资源用于任何恶意用途或商业目的。
 
@@ -9,7 +16,6 @@ B 站视频下载库（TypeScript / Node.js），支持 av 号、BV 号与番剧
 - 链接下载视频
 - 清晰度可选：360P ~ 1080P+（>720P 需登录）
 - 内置 ffmpeg，可直接转音频（MP3 / AAC / WAV / FLAC 等）
-- 自定义输出目录与文件名
 - 提供命令行工具 `downbili`
 
 ## 安装
@@ -26,6 +32,17 @@ yarn add downbili
 ```
 
 ## 快速开始
+
+### cli使用
+
+```bash
+# 视频
+npx downbili 'https://www.bilibili.com/video/BVxxxxxxx'
+# 音频
+npx downbili 'https://www.bilibili.com/video/BVxxxxxxx' --format mp3
+```
+
+### 库使用
 
 ```ts
 import { downBili } from 'downbili';
@@ -55,47 +72,54 @@ async function downBili(url: string, format?: AudioFormatEnum): Promise<DownFile
 
 ### Option 参数
 
-| 参数         | 类型                    | 说明                                        |
-| ------------ | ----------------------- | ------------------------------------------- |
-| `url`        | `string`                | 视频链接（必填）                            |
-| `level`      | `ArticulationEnum`      | 视频清晰度，默认无 `sessdata` 为 360P       |
-| `sessdata`   | `string`                | B 站登录 Cookie，可提升清晰度上限           |
-| `type`       | `VideoTypeEnum`         | 视频类型：`silent` / `audio` / `default`    |
-| `fileName`   | `string`                | 输出文件名（不含扩展名）                    |
-| `folder`     | `string`                | 输出目录，默认 `media`                      |
-| `output`     | `string`                | 输出绝对路径（优先级高于 `folder`）         |
-| `format`     | `AudioFormatEnum`       | 设置后下载并转为音频                        |
-| `onComplete` | `() => void`            | 下载完成回调                                |
-| `onError`    | `() => void`            | 下载失败回调                                |
+| 参数         | 类型               | 说明                                     |
+| ------------ | ------------------ | ---------------------------------------- |
+| `url`        | `string`           | 视频链接（必填）                         |
+| `level`      | `ArticulationEnum` | 视频清晰度，默认无 `sessdata` 为 360P    |
+| `sessdata`   | `string`           | B 站登录 Cookie，可提升清晰度上限        |
+| `type`       | `VideoTypeEnum`    | 视频类型：`silent` / `audio` / `default` |
+| `fileName`   | `string`           | 输出文件名（不含扩展名）                 |
+| `folder`     | `string`           | 输出目录，默认 `media`                   |
+| `output`     | `string`           | 输出绝对路径（优先级高于 `folder`）      |
+| `format`     | `AudioFormatEnum`  | 设置后下载并转为音频                     |
+| `onComplete` | `() => void`       | 下载完成回调                             |
+| `onError`    | `() => void`       | 下载失败回调                             |
 
 ### 返回值 DownFileMessage
 
-| 参数        | 说明                    |
-| ----------- | ----------------------- |
-| `fPath`     | 下载完成后的文件路径    |
+| 参数        | 说明                     |
+| ----------- | ------------------------ |
+| `fPath`     | 下载完成后的文件路径     |
 | `cwd`       | 运行时的 `process.cwd()` |
-| `name`      | 文件名                  |
-| `mediaPath` | 输出目录                |
+| `name`      | 文件名                   |
+| `mediaPath` | 输出目录                 |
 
 ### 枚举
 
 ```ts
 enum ArticulationEnum {
   _1080PLUS = 112, // 1080P+
-  _1080     = 80,  // 1080P
-  _720      = 64,  // 720P
-  _480      = 32,  // 360P
-  _16       = 16,  // 360P
+  _1080 = 80, // 1080P
+  _720 = 64, // 720P
+  _480 = 32, // 360P
+  _16 = 16, // 360P
 }
 
 enum AudioFormatEnum {
-  MP3 = 'mp3', AAC = 'aac', WAV = 'wav', FLAC = 'flac',
-  ALAC = 'alac', OGG = 'ogg', APE = 'ape', WMA = 'wma', M4A = 'm4a',
+  MP3 = 'mp3',
+  AAC = 'aac',
+  WAV = 'wav',
+  FLAC = 'flac',
+  ALAC = 'alac',
+  OGG = 'ogg',
+  APE = 'ape',
+  WMA = 'wma',
+  M4A = 'm4a',
 }
 
 enum VideoTypeEnum {
   silent = 'silent', // 无声视频
-  audio  = 'audio',  // 纯音频
+  audio = 'audio', // 纯音频
   default = 'default',
 }
 ```
@@ -149,16 +173,16 @@ const opt: Option = {
 downbili <视频链接> [选项]
 ```
 
-| 选项                  | 说明                                             |
-| --------------------- | ------------------------------------------------ |
-| `-h, --help`          | 显示帮助                                         |
-| `--sessdata <值>`     | 传入 sessdata，提升清晰度上限                    |
-| `--level <清晰度>`    | `360` / `480` / `720` / `1080` / `1080+`         |
-| `--format <格式>`     | 下载后转为音频，如 `mp3`、`aac`、`wav`           |
+| 选项               | 说明                                     |
+| ------------------ | ---------------------------------------- |
+| `-h, --help`       | 显示帮助                                 |
+| `--sessdata <值>`  | 传入 sessdata，提升清晰度上限            |
+| `--level <清晰度>` | `360` / `480` / `720` / `1080` / `1080+` |
+| `--format <格式>`  | 下载后转为音频，如 `mp3`、`aac`、`wav`   |
 
 ```bash
-downbili https://www.bilibili.com/video/BVxxxxxxx --level 1080 --sessdata xxxxxx
-downbili https://www.bilibili.com/video/BVxxxxxxx --format mp3
+downbili 'https://www.bilibili.com/video/BVxxxxxxx' --level 1080 --sessdata xxxxxx
+downbili 'https://www.bilibili.com/video/BVxxxxxxx' --format mp3
 ```
 
 ## 注意事项
