@@ -50,7 +50,6 @@ async function main(): Promise<void> {
         opt.format = options.format;
       }
       const res = await downBili(opt);
-      console.log(chalk.green('Download successfully!'));
       console.log(chalk.blue(`File saved at: ${res.fPath}`));
     });
 

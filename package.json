@@ -1,6 +1,6 @@
 {
   "name": "downbili",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "下载bilibili视频",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
